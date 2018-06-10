@@ -26,7 +26,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var gliderTextureArray = [SKTexture]()
     var speedUpdated: [Bool]       = Array(repeatElement(false, count: 4))
     
-    private var time:Int = 0
+    private var animationIsInProgress:Bool = false
+    private var time:Int                   = 0
     
     override func didMove(to view: SKView) {
         
@@ -157,33 +158,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
-        self.gliderSprite.removeAllChildren()
-        
-        self.gliderSprite.physicsBody?.categoryBitMask    = 0x0
-        self.gliderSprite.physicsBody?.collisionBitMask   = 0x0
-        self.gliderSprite.physicsBody?.contactTestBitMask = 0x0
-        
-        let scaleUp     = SKAction.scale(by: 4.0, duration: 0.75)
-        let scaleDown   = SKAction.scale(by: 0.25, duration: 0.75)
-        let ascend      = SKAction.animate(with: gliderTextureArray, timePerFrame: 0.2, resize: false, restore: false)
-        let wait        = SKAction.wait(forDuration: 0.2)
-        let descend     = SKAction.animate(with: gliderTextureArray.reversed(), timePerFrame: 0.2, resize: false, restore: false)
-        let gliderTrail = SKEmitterNode(fileNamed: "GliderTrail")!
-        
-        self.gliderSprite.run(SKAction.group([scaleUp, ascend, wait]))
-        self.gliderSprite.run(SKAction.group([scaleDown, descend]), completion: {
+        // If a glider animation is already in progress, prevent the player from triggering the animation on
+        // multiple touchesEnded events.
+        if (!animationIsInProgress) {
             
-            gliderTrail.position  = CGPoint(x: 0.0, y: -self.gliderSprite.size.height/2.0)
-            gliderTrail.zPosition = (self.gliderSprite.zPosition - 1)
-            self.gliderSprite.addChild(gliderTrail)
+            animationIsInProgress = true
             
-            self.gliderSprite.physicsBody?.categoryBitMask    = 0x2
-            self.gliderSprite.physicsBody?.collisionBitMask   = 0x1
-            self.gliderSprite.physicsBody?.contactTestBitMask = 0x1
-        })
-        
-        
-        
+            self.gliderSprite.childNode(withName: "gliderTrail")?.run(SKAction.fadeOut(withDuration: 0.15))
+
+            self.gliderSprite.physicsBody?.categoryBitMask    = 0x0
+            self.gliderSprite.physicsBody?.collisionBitMask   = 0x0
+            self.gliderSprite.physicsBody?.contactTestBitMask = 0x0
+            
+            let scaleUp     = SKAction.scale(by: 4.0, duration: 0.75)
+            let scaleDown   = SKAction.scale(by: 0.25, duration: 0.75)
+            let ascend      = SKAction.animate(with: gliderTextureArray, timePerFrame: 0.2, resize: false, restore: false)
+            let wait        = SKAction.wait(forDuration: 0.2)
+            let descend     = SKAction.animate(with: gliderTextureArray.reversed(), timePerFrame: 0.2, resize: false, restore: false)
+            
+            self.gliderSprite.run(SKAction.group([scaleUp, ascend, wait]))
+            self.gliderSprite.run(SKAction.group([scaleDown, descend]), completion: {
+
+                self.gliderSprite.childNode(withName: "gliderTrail")?.run(SKAction.fadeIn(withDuration: 0.15))
+                
+                self.gliderSprite.physicsBody?.categoryBitMask    = 0x2
+                self.gliderSprite.physicsBody?.collisionBitMask   = 0x1
+                self.gliderSprite.physicsBody?.contactTestBitMask = 0x1
+                self.animationIsInProgress = false
+            })
+        }
     }
     
     func generateGradientBackground() {
@@ -219,6 +222,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gliderSprite.zPosition = 6.0
         
         let gliderTrail       = SKEmitterNode(fileNamed: "GliderTrail")!
+        gliderTrail.name      = "gliderTrail"
         gliderTrail.position  = CGPoint(x: 0.0, y: -gliderSprite.size.height/2.0)
         gliderTrail.zPosition = (gliderSprite.zPosition - 1)
         
