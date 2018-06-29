@@ -6,9 +6,10 @@
 //  Copyright © 2018 Blaze Kotsenburg. All rights reserved.
 //
 
-import Foundation
+import SpriteKit
+import GameplayKit
+import CoreImage
 
-
-class StartScene {
+class StartScene : SKScene {
     
 }

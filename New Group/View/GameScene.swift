@@ -10,7 +10,7 @@ import SpriteKit
 import GameplayKit
 import CoreImage
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class GameScene : SKScene, SKPhysicsContactDelegate {
     
     private var gliderSprite: SKSpriteNode!
     private var gliderTrack:  SKSpriteNode!
@@ -387,107 +387,107 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 }
 
-/******************* External Extensions *******************/
-
+///******************* External Extensions *******************/
 //
-//  The following extension is used to help provide a gradient background to an SKScene by creating
-//  a gradient SKTexture and then adding the texture to an SKShapeNode or SKSpriteNode.
+////
+////  The following extension is used to help provide a gradient background to an SKScene by creating
+////  a gradient SKTexture and then adding the texture to an SKShapeNode or SKSpriteNode.
+////
+////    Linear gradient texture
+////    Based on: https://gist.github.com/Tantas/7fc01803d6b559da48d6, https://gist.github.com/craiggrummitt/ad855e358004b5480960
+////
+////  Created by Maxim on 1/1/16.
+////  Copyright © 2016 Maxim Bilan. All rights reserved.
+////
 //
-//    Linear gradient texture
-//    Based on: https://gist.github.com/Tantas/7fc01803d6b559da48d6, https://gist.github.com/craiggrummitt/ad855e358004b5480960
+//public extension SKTexture {
+//    
+//    public enum GradientDirection {
+//        case up
+//        case left
+//        case upLeft
+//        case upRight
+//    }
+//    
+//    convenience init(size: CGSize, color1: CIColor, color2: CIColor, direction: GradientDirection = .up) {
+//        
+//        let context = CIContext(options: nil)
+//        let filter = CIFilter(name: "CILinearGradient")
+//        var startVector: CIVector
+//        var endVector: CIVector
+//        
+//        filter!.setDefaults()
+//        
+//        switch direction {
+//        case .up:
+//            startVector = CIVector(x: size.width * 0.5, y: 0)
+//            endVector = CIVector(x: size.width * 0.5, y: size.height)
+//        case .left:
+//            startVector = CIVector(x: size.width, y: size.height * 0.5)
+//            endVector = CIVector(x: 0, y: size.height * 0.5)
+//        case .upLeft:
+//            startVector = CIVector(x: size.width, y: 0)
+//            endVector = CIVector(x: 0, y: size.height)
+//        case .upRight:
+//            startVector = CIVector(x: 0, y: 0)
+//            endVector = CIVector(x: size.width, y: size.height)
+//        }
+//        
+//        filter!.setValue(startVector, forKey: "inputPoint0")
+//        filter!.setValue(endVector, forKey: "inputPoint1")
+//        filter!.setValue(color1, forKey: "inputColor0")
+//        filter!.setValue(color2, forKey: "inputColor1")
+//        
+//        let image = context.createCGImage(filter!.outputImage!, from: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+//        self.init(cgImage: image!)
+//    }
+//}
 //
-//  Created by Maxim on 1/1/16.
-//  Copyright © 2016 Maxim Bilan. All rights reserved.
+////
+////  CIColorRGBA.swift
+////
+////
+////  Created by Maxim on 1/1/16.
+////  Copyright © 2016 Maxim Bilan. All rights reserved.
+////
 //
-
-public extension SKTexture {
-    
-    public enum GradientDirection {
-        case up
-        case left
-        case upLeft
-        case upRight
-    }
-    
-    convenience init(size: CGSize, color1: CIColor, color2: CIColor, direction: GradientDirection = .up) {
-        
-        let context = CIContext(options: nil)
-        let filter = CIFilter(name: "CILinearGradient")
-        var startVector: CIVector
-        var endVector: CIVector
-        
-        filter!.setDefaults()
-        
-        switch direction {
-        case .up:
-            startVector = CIVector(x: size.width * 0.5, y: 0)
-            endVector = CIVector(x: size.width * 0.5, y: size.height)
-        case .left:
-            startVector = CIVector(x: size.width, y: size.height * 0.5)
-            endVector = CIVector(x: 0, y: size.height * 0.5)
-        case .upLeft:
-            startVector = CIVector(x: size.width, y: 0)
-            endVector = CIVector(x: 0, y: size.height)
-        case .upRight:
-            startVector = CIVector(x: 0, y: 0)
-            endVector = CIVector(x: size.width, y: size.height)
-        }
-        
-        filter!.setValue(startVector, forKey: "inputPoint0")
-        filter!.setValue(endVector, forKey: "inputPoint1")
-        filter!.setValue(color1, forKey: "inputColor0")
-        filter!.setValue(color2, forKey: "inputColor1")
-        
-        let image = context.createCGImage(filter!.outputImage!, from: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-        self.init(cgImage: image!)
-    }
-}
-
-//
-//  CIColorRGBA.swift
-//
-//
-//  Created by Maxim on 1/1/16.
-//  Copyright © 2016 Maxim Bilan. All rights reserved.
-//
-
-public extension CIColor {
-    
-    convenience init(rgba: String) {
-        var red: CGFloat = 0.0
-        var green: CGFloat = 0.0
-        var blue: CGFloat = 0.0
-        var alpha: CGFloat = 1.0
-        if rgba.hasPrefix("#") {
-            let index = rgba.index(rgba.startIndex, offsetBy: 1)
-            let hex = rgba[index...]
-            let scanner = Scanner(string: String(hex))
-            var hexValue: CUnsignedLongLong = 0
-            if scanner.scanHexInt64(&hexValue) {
-                switch (hex.count) {
-                case 3:
-                    red = CGFloat((hexValue & 0xF00) >> 8) / 15.0
-                    green = CGFloat((hexValue & 0x0F0) >> 4) / 15.0
-                    blue = CGFloat(hexValue & 0x00F) / 15.0
-                case 4:
-                    red = CGFloat((hexValue & 0xF000) >> 12) / 15.0
-                    green = CGFloat((hexValue & 0x0F00) >> 8) / 15.0
-                    blue = CGFloat((hexValue & 0x00F0) >> 4) / 15.0
-                    alpha = CGFloat(hexValue & 0x000F) / 15.0
-                case 6:
-                    red = CGFloat((hexValue & 0xFF0000) >> 16) / 255.0
-                    green = CGFloat((hexValue & 0x00FF00) >> 8) / 255.0
-                    blue = CGFloat(hexValue & 0x0000FF) / 255.0
-                case 8:
-                    red = CGFloat((hexValue & 0xFF000000) >> 24) / 255.0
-                    green = CGFloat((hexValue & 0x00FF0000) >> 16) / 255.0
-                    blue = CGFloat((hexValue & 0x0000FF00) >> 8) / 255.0
-                    alpha = CGFloat(hexValue & 0x000000FF) / 255.0
-                default:
-                    break;
-                }
-            }
-        }
-        self.init(red:red, green:green, blue:blue, alpha:alpha)
-    }
-}
+//public extension CIColor {
+//    
+//    convenience init(rgba: String) {
+//        var red: CGFloat = 0.0
+//        var green: CGFloat = 0.0
+//        var blue: CGFloat = 0.0
+//        var alpha: CGFloat = 1.0
+//        if rgba.hasPrefix("#") {
+//            let index = rgba.index(rgba.startIndex, offsetBy: 1)
+//            let hex = rgba[index...]
+//            let scanner = Scanner(string: String(hex))
+//            var hexValue: CUnsignedLongLong = 0
+//            if scanner.scanHexInt64(&hexValue) {
+//                switch (hex.count) {
+//                case 3:
+//                    red = CGFloat((hexValue & 0xF00) >> 8) / 15.0
+//                    green = CGFloat((hexValue & 0x0F0) >> 4) / 15.0
+//                    blue = CGFloat(hexValue & 0x00F) / 15.0
+//                case 4:
+//                    red = CGFloat((hexValue & 0xF000) >> 12) / 15.0
+//                    green = CGFloat((hexValue & 0x0F00) >> 8) / 15.0
+//                    blue = CGFloat((hexValue & 0x00F0) >> 4) / 15.0
+//                    alpha = CGFloat(hexValue & 0x000F) / 15.0
+//                case 6:
+//                    red = CGFloat((hexValue & 0xFF0000) >> 16) / 255.0
+//                    green = CGFloat((hexValue & 0x00FF00) >> 8) / 255.0
+//                    blue = CGFloat(hexValue & 0x0000FF) / 255.0
+//                case 8:
+//                    red = CGFloat((hexValue & 0xFF000000) >> 24) / 255.0
+//                    green = CGFloat((hexValue & 0x00FF0000) >> 16) / 255.0
+//                    blue = CGFloat((hexValue & 0x0000FF00) >> 8) / 255.0
+//                    alpha = CGFloat(hexValue & 0x000000FF) / 255.0
+//                default:
+//                    break;
+//                }
+//            }
+//        }
+//        self.init(red:red, green:green, blue:blue, alpha:alpha)
+//    }
+//}

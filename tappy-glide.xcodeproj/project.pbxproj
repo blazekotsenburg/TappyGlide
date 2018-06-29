@@ -26,6 +26,8 @@
 		67B31CBF2006B87D00E2CBD3 /* SKScoreLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67B31CBE2006B87D00E2CBD3 /* SKScoreLabel.swift */; };
 		67E0DC702005D4F60040198E /* Enemy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E0DC6F2005D4F60040198E /* Enemy.swift */; };
 		67E91B7D20E5D8420014C523 /* StartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E91B7C20E5D8420014C523 /* StartScene.swift */; };
+		67E91B8020E5DC740014C523 /* CIColorRGBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E91B7F20E5DC740014C523 /* CIColorRGBA.swift */; };
+		67E91B8320E5DCB20014C523 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E91B8220E5DCB20014C523 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,8 @@
 		67B31CBE2006B87D00E2CBD3 /* SKScoreLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKScoreLabel.swift; sourceTree = "<group>"; };
 		67E0DC6F2005D4F60040198E /* Enemy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enemy.swift; sourceTree = "<group>"; };
 		67E91B7C20E5D8420014C523 /* StartScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScene.swift; sourceTree = "<group>"; };
+		67E91B7F20E5DC740014C523 /* CIColorRGBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIColorRGBA.swift; sourceTree = "<group>"; };
+		67E91B8220E5DCB20014C523 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +138,7 @@
 		67A67EAB200344EC000AB589 /* tappy-glide */ = {
 			isa = PBXGroup;
 			children = (
+				67E91B7E20E5DB840014C523 /* Extensions */,
 				67A67EA8200343B3000AB589 /* Controller */,
 				67A67EA7200343A6000AB589 /* Model */,
 				67A67EA620034390000AB589 /* View */,
@@ -145,6 +150,15 @@
 			);
 			name = "tappy-glide";
 			path = "New Group";
+			sourceTree = "<group>";
+		};
+		67E91B7E20E5DB840014C523 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				67E91B7F20E5DC740014C523 /* CIColorRGBA.swift */,
+				67E91B8220E5DCB20014C523 /* Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -228,7 +242,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				67A67E7E1FFEEECB000AB589 /* GameScene.swift in Sources */,
+				67E91B8020E5DC740014C523 /* CIColorRGBA.swift in Sources */,
 				67B31CBF2006B87D00E2CBD3 /* SKScoreLabel.swift in Sources */,
+				67E91B8320E5DCB20014C523 /* Extensions.swift in Sources */,
 				677C2CF4201418CB009F273B /* StarSprite.swift in Sources */,
 				67E0DC702005D4F60040198E /* Enemy.swift in Sources */,
 				67A67E801FFEEECB000AB589 /* GameViewController.swift in Sources */,
