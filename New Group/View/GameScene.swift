@@ -19,15 +19,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var model:        Model!
     private var scoreLbl:     SKScoreLabel!
     private var extraLife:    SKScoreLabel!
+    private var spawnTimer:   Timer!
     
-    var spriteAnimations: [String] = ["gliderSpriteJump0.png", "gliderSpriteJump1.png", "gliderSpriteJump2.png", "gliderSpriteJump3.png"]
-    var cloudImages: [String]      = ["cloud0.png", "cloud1.png"]
+    private var spriteAnimations: [String] = ["gliderSpriteJump0.png", "gliderSpriteJump1.png", "gliderSpriteJump2.png", "gliderSpriteJump3.png"]
+    private var cloudImages:      [String] = ["cloud0.png", "cloud1.png"]
+    
     private var gliderTextureAtlas = SKTextureAtlas()
     private var gliderTextureArray = [SKTexture]()
+    private var cloudSpawnPoints:    [UInt32]!
+    private var starSpawnPoints:     [UInt32]!
+    
     var speedUpdated: [Bool]       = Array(repeatElement(false, count: 4))
     
-    private var animationIsInProgress:Bool = false
-    private var time:Int                   = 0
+    private var animationIsInProgress: Bool         = false
+    private var time:                  Int          = 1
+    private var prevTime:              TimeInterval = 0
+    private var currSpeed:             CGFloat      = 1.0
     
     override func didMove(to view: SKView) {
         
@@ -38,14 +45,42 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // Get sprite animation frames ready to go
         gliderTextureAtlas = SKTextureAtlas(named: "gliderAnimations")
         
+        // Organize all glider images so that animations can be run on them in order.
         for i in 0...gliderTextureAtlas.textureNames.count - 1 {
             
             let name = "gliderSpriteJump\(i)"
             gliderTextureArray.append(SKTexture(imageNamed: name))
         }
         
-        sceneWidth  = self.scene?.size.width
-        sceneHeight = self.scene?.size.height
+        sceneWidth  = self.scene?.frame.width
+        sceneHeight = self.scene?.frame.height
+        cloudSpawnPoints = [UInt32]()
+        starSpawnPoints  = [UInt32]()
+        
+        // Generate a set of random spawn points for clouds and stars.
+        var i = 0
+        while i < 20 {
+            
+            var newCloudPoint = arc4random_uniform(UInt32(sceneWidth)) + 1
+            var newStarPoint  = arc4random_uniform(UInt32(sceneWidth)) + 1
+            
+            // Check to see if the random number generated for cloud spawn points already exists.
+            // If so, generate new random number until it is unique to the array.
+            while cloudSpawnPoints.contains(newCloudPoint) {
+                newCloudPoint = arc4random_uniform(UInt32(sceneWidth))
+            }
+            
+            // Check to see if the random number generated for star spawn points already exists.
+            // If so, generate new random number until it is unique.
+            while starSpawnPoints.contains(newStarPoint) {
+                newStarPoint = arc4random_uniform(UInt32(sceneWidth))
+            }
+            
+            cloudSpawnPoints.append(arc4random_uniform(UInt32(sceneWidth)))
+            starSpawnPoints.append(arc4random_uniform(UInt32(sceneWidth)))
+            
+            i += 1
+        }
         
         createGlider() // consider getting rid of function since it this code happens one time.
         
@@ -64,82 +99,79 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(scoreLbl)
         self.addChild(extraLife)
         generateGradientBackground()
+        
+        spawnTimer = Timer()
+    }
+    
+    func startTimer() {
+        guard spawnTimer == nil else { return }
+        // After a move towards maintainting collection of settings, change something in new interval based on score so the
+        // spawn rates get slightly faster but still playable.
+        var newInterval = TimeInterval(arc4random_uniform(7) + 3)/5.0
+        if (abs(prevTime - newInterval) <= 0.6) {
+            newInterval = 0.8
+        }
+        spawnTimer = Timer.scheduledTimer(timeInterval: newInterval, target: self, selector: #selector(GameScene.spawn), userInfo: nil, repeats: false)
+    }
+    
+    func stopTimer() {
+        guard spawnTimer != nil else { return }
+        spawnTimer?.invalidate()
+        spawnTimer = nil
+    }
+    
+    @objc func spawn () {
+        spawnCloudsAndStars(speed: 1.0)
+        self.addChild(spawnEnemySprite(with: currSpeed))
+        stopTimer()
     }
     
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
-        time += 1
         
-        //Switch case for spawning frequencies and speed updates to enemy sprites.
-        switch self.model.getScore() {
-            
-        case 0 ..< 8:
-            
-            if time > 90 {
-                
-                self.addChild(spawnEnemySprite(with: 1.0))
+        startTimer()
+        let score = self.model.getScore()
 
-                time = Int(arc4random_uniform(40) + 1)
+        switch score {
+
+        case 8 ..<  16:
+
+            if (!speedUpdated[0]) {
+
+                self.currSpeed = 1.15
+                updateSpriteSpeeds(with: self.currSpeed)
             }
-            
-        case 8 ..< 16:
-            
-            if time > 90 {
-                
-                self.addChild(spawnEnemySprite(with: 1.15))
-                if !speedUpdated[0] {
-                    
-                    updateSpriteSpeeds(with: 1.15)
-                    speedUpdated[0] = true
-                }
-                
-                time = Int(arc4random_uniform(40) + 1)
-            }
-            
+        break
+
         case 16 ..< 24:
-            
-            if time > 90 {
-                
-                self.addChild(spawnEnemySprite(with: 1.25))
-                if !speedUpdated[1] {
-                    
-                    updateSpriteSpeeds(with: 1.25)
-                    speedUpdated[1] = true
-                }
-                
-                time = Int(arc4random_uniform(40) + 1)
+
+            if (!speedUpdated[1]) {
+
+                self.currSpeed = 1.25
+                updateSpriteSpeeds(with: self.currSpeed)
             }
-            
+        break
+
         case 24 ..< 32:
-            
-            if time > 60 {
-                
-                self.addChild(spawnEnemySprite(with: 1.45))
-                if !speedUpdated[2] {
-                    
-                    updateSpriteSpeeds(with: 1.45)
-                    speedUpdated[2] = true
-                }
-                
-                time = Int(arc4random_uniform(35) + 1)
+
+            if(!speedUpdated[2]) {
+
+                self.currSpeed = 1.45
+                updateSpriteSpeeds(with: self.currSpeed)
             }
-            
+
+        case let x where x >= 32:
+
+            if(!speedUpdated[3]) {
+
+                self.currSpeed = 1.65
+                updateSpriteSpeeds(with: self.currSpeed)
+            }
+        break
+
         default:
-            
-            if time > 60 {
-                
-                self.addChild(spawnEnemySprite(with: 1.65))
-                if !speedUpdated[3] {
-                    
-                    updateSpriteSpeeds(with: 1.65)
-                    speedUpdated[3] = true
-                }
-                
-                time = Int(arc4random_uniform(40) + 1)
-            }
+            updateSpriteSpeeds(with: 1.0)
         }
         
-        spawnCloudsAndStars(speed: 1.0)
         checkForScoreUpdates()
     }
     
@@ -149,10 +181,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if collision == (self.gliderSprite.physicsBody?.categoryBitMask)! | 0x1 { // 0x1 = collisionBitMask for enemy sprites
             
-            let rotateGlider:SKAction = SKAction.rotate(byAngle: 45.0, duration: 5)
-            self.gliderSprite.removeAllChildren()
-            self.gliderSprite.run(SKAction.repeatForever(rotateGlider))
-            self.gliderSprite.physicsBody?.velocity = CGVector(dx: 200.0, dy: -200.0)
+            // Let sprite animation go to right or left depending on score to make it seem random.
+            if (self.model.getScore() % 2 == 0) {
+                let rotateGlider:SKAction = SKAction.rotate(byAngle: 45.0, duration: 5)
+                self.gliderSprite.removeAllChildren()
+                self.gliderSprite.run(SKAction.repeatForever(rotateGlider))
+                self.gliderSprite.physicsBody?.velocity = CGVector(dx: 200.0, dy: -200.0)
+            }
+            else {
+                let rotateGlider:SKAction = SKAction.rotate(byAngle: -45.0, duration: 5)
+                self.gliderSprite.removeAllChildren()
+                self.gliderSprite.run(SKAction.repeatForever(rotateGlider))
+                self.gliderSprite.physicsBody?.velocity = CGVector(dx: -200.0, dy: -200.0)
+            }
+            
         }
     }
     
@@ -211,7 +253,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let gliderTexture:SKTexture      = SKTexture(imageNamed: "gliderSprite.png")
         let gliderSpriteCategory: UInt32 = 0x1 << 1
         
-        gliderSprite             = SKSpriteNode(texture: gliderTexture)
+        gliderSprite             = SKSpriteNode( texture: gliderTexture)
         gliderSprite.physicsBody = SKPhysicsBody(texture: gliderTexture, size: CGSize(width: gliderSprite.size.width/2, height: gliderSprite.size.height/2))
         
         gliderSprite.physicsBody?.categoryBitMask    = gliderSpriteCategory
@@ -233,10 +275,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func spawnEnemySprite(with speed: CGFloat) -> SKShapeNode {
         
+        //will need to consider making png's for enemies if -75 offset can not be fixed.
         let enemySprite   = Enemy(circleOfRadius: 25.0, at: CGPoint(x: sceneWidth/2.0 , y: sceneHeight)) //not sure why the -75 offset needs to be
         enemySprite.speed = speed
         
-        enemySprite.run(SKAction.moveTo(y: -sceneHeight, duration: 8.0))
+        enemySprite.run(SKAction.moveTo(y: -sceneHeight, duration: 6.0))
         
         return enemySprite
     }
@@ -253,8 +296,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func spawnCloudsAndStars(speed: CGFloat) {
         
-        var spawnCloud = arc4random_uniform(1000) + 1
-        var spawnStar  = arc4random_uniform(1000) + 1
+        var spawnCloud = arc4random_uniform(20) + 1
+        var spawnStar  = arc4random_uniform(20) + 1
+//        let spawnBound = Int(arc4random_uniform(UInt32(time)) % 19)
         
         if spawnCloud >= 1 && spawnCloud <= 10 {
             
@@ -265,35 +309,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             cloud.speed = ((2.0 * CGFloat(spawnCloud)) + 1.0) - 0.25
             let xSpawn  = CGFloat(arc4random_uniform(UInt32(self.sceneWidth)))
             let move    = SKAction.moveTo(y: -self.sceneHeight, duration: 15.0)
-            
+
             cloud.run(move)
-            
+
             cloud.position = CGPoint(x: xSpawn, y: self.sceneHeight + frame.height/2.0)
-            
+
             self.addChild(cloud)
         }
         
         if spawnStar >= 1 && spawnStar <= 10 {
             
-            spawnStar               = UInt32(spawnStar) & 1
+            let starSpeed           = UInt32(spawnStar) & 1
+            let starScaleIndex      = UInt32(spawnStar) & 1
+            spawnStar               = UInt32(spawnStar) % 19
             let scaleArr:[CGFloat]  = [0.15,0.25]
-            let scaledSize:CGFloat  = scaleArr[Int(arc4random_uniform(2))]
-            let xSpawn:CGFloat      = CGFloat(arc4random_uniform(UInt32(self.sceneWidth)))
+            let scaledSize:CGFloat  = scaleArr[Int(starScaleIndex)]
+            let xSpawn  = CGFloat(arc4random_uniform(UInt32(self.sceneWidth)))
             
             //Check bounds for spawning a star (+-15 from center screen)
-            if (xSpawn > 0 && xSpawn < self.sceneWidth/2 - 15) || (xSpawn > self.sceneWidth/2 + 15 && xSpawn < self.sceneWidth) {
-                
-                let star   = StarSprite(scale: scaledSize)
-                star.name  = "star"
-                star.speed = ((2.0 * CGFloat(spawnStar)) + 1.0) - 0.25
-                
-                let move = SKAction.moveTo(y: -self.sceneHeight, duration: 15.0)
-                star.run(move)
-                
-                star.position = CGPoint(x: xSpawn, y: self.sceneHeight + frame.height/2.0)
-                
-                self.addChild(star)
-            }
+//            if (xSpawn > 0 && xSpawn < self.sceneWidth/2 - 15) || (xSpawn > self.sceneWidth/2 + 15 && xSpawn < self.sceneWidth) {
+//
+            let star   = StarSprite(scale: scaledSize)
+            star.name  = "star"
+            star.speed = ((2.0 * CGFloat(starSpeed)) + 1.0) - 0.25
+            
+            let move = SKAction.moveTo(y: -self.sceneHeight, duration: 15.0)
+            star.run(move)
+            
+            star.position = CGPoint(x: xSpawn, y: self.sceneHeight + frame.height/2.0)
+            
+            self.addChild(star)
+//            }
         }
     }
     
