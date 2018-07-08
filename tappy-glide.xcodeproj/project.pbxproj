@@ -33,6 +33,8 @@
 		67E91B8920F26F500014C523 /* enemyAnimations.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8820F26F500014C523 /* enemyAnimations.atlas */; };
 		67E91B8B20F27B180014C523 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E91B8A20F27B180014C523 /* GameOverScene.swift */; };
 		67E91B8D20F27C190014C523 /* GameOverScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8C20F27C190014C523 /* GameOverScene.sks */; };
+		67E91B9020F2AA5F0014C523 /* GameOverSparkle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8E20F2AA5F0014C523 /* GameOverSparkle.sks */; };
+		67E91B9120F2AA5F0014C523 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8F20F2AA5F0014C523 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +66,8 @@
 		67E91B8820F26F500014C523 /* enemyAnimations.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = enemyAnimations.atlas; sourceTree = "<group>"; };
 		67E91B8A20F27B180014C523 /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		67E91B8C20F27C190014C523 /* GameOverScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOverScene.sks; sourceTree = "<group>"; };
+		67E91B8E20F2AA5F0014C523 /* GameOverSparkle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOverSparkle.sks; sourceTree = "<group>"; };
+		67E91B8F20F2AA5F0014C523 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,7 +148,9 @@
 				67E91B8420E5E6460014C523 /* StartScene.sks */,
 				67A67E94200324B5000AB589 /* GliderTrail.sks */,
 				67E91B8C20F27C190014C523 /* GameOverScene.sks */,
+				67E91B8E20F2AA5F0014C523 /* GameOverSparkle.sks */,
 				67A67EA9200343C4000AB589 /* Star */,
+				67E91B8F20F2AA5F0014C523 /* Assets.xcassets */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -241,10 +247,12 @@
 				671989582017A11B00265362 /* Assets.xcassets in Resources */,
 				67A67E96200324B5000AB589 /* GliderTrail.sks in Resources */,
 				67A67E7A1FFEEECB000AB589 /* GameScene.sks in Resources */,
+				67E91B9120F2AA5F0014C523 /* Assets.xcassets in Resources */,
 				67A67E97200324B5000AB589 /* Assets.xcassets in Resources */,
 				67A67E881FFEEECB000AB589 /* LaunchScreen.storyboard in Resources */,
 				67E91B8720F05F780014C523 /* gliderHomeImage.png in Resources */,
 				67A67EA5200342CA000AB589 /* StarDown.sks in Resources */,
+				67E91B9020F2AA5F0014C523 /* GameOverSparkle.sks in Resources */,
 				67A67EA320034217000AB589 /* StarUp.sks in Resources */,
 				67E91B8520E5E6460014C523 /* StartScene.sks in Resources */,
 				677C5DB2208D94C800F5B8D0 /* gliderAnimations.atlas in Resources */,
