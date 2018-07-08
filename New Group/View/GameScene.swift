@@ -20,6 +20,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     private var scoreLbl:     SKScoreLabel!
     private var extraLife:    SKScoreLabel!
     private var spawnTimer:   Timer!
+    private var enemyTexture: SKTexture!
     
     private var spriteAnimations: [String] = ["gliderSpriteJump0.png", "gliderSpriteJump1.png", "gliderSpriteJump2.png", "gliderSpriteJump3.png"]
     private var cloudImages:      [String] = ["cloud0.png", "cloud1.png"]
@@ -42,6 +43,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         // Get sprite animation frames ready to go
         gliderTextureAtlas = SKTextureAtlas(named: "gliderAnimations")
+        enemyTexture       = SKTexture(imageNamed: "tappyGlideEnemy0.png")
         
         // Organize all glider images so that animations can be run on them in order.
         for i in 0...gliderTextureAtlas.textureNames.count - 1 {
@@ -244,11 +246,17 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         self.addChild(gliderSprite)
     }
     
-    func spawnEnemySprite(with speed: CGFloat) -> SKShapeNode {
+    func spawnEnemySprite(with speed: CGFloat) -> SKSpriteNode {
         
         //will need to consider making png's for enemies if -75 offset can not be fixed.
-        let enemySprite   = Enemy(circleOfRadius: 25.0, at: CGPoint(x: sceneWidth/2.0 , y: sceneHeight)) //not sure why the -75 offset needs to be
+//        let enemySprite   = Enemy(circleOfRadius: 25.0, at: CGPoint(x: sceneWidth/2.0 , y: sceneHeight)) //not sure why the -75 offset needs to be
+//        let enemySprite = Enemy(self.enemyTexture)
+//        let enemySprite: SKSpriteNode = SKSpriteNode(texture: self.enemyTexture)
+        let enemySprite:Enemy = Enemy(texture: self.enemyTexture, color: SKColor.clear, size: CGSize(width: 75, height: 75))
         enemySprite.speed = speed
+        enemySprite.name  = "enemy"
+        enemySprite.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight + enemySprite.frame.height)
+        enemySprite.zPosition = 5
         
         enemySprite.run(SKAction.moveTo(y: -sceneHeight, duration: 6.0))
         
