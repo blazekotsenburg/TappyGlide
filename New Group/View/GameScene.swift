@@ -26,8 +26,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     private var gliderTextureAtlas = SKTextureAtlas()
     private var gliderTextureArray = [SKTexture]()
-    private var cloudSpawnPoints:    [UInt32]!
-    private var starSpawnPoints:     [UInt32]!
     
     var speedUpdated: [Bool]       = Array(repeatElement(false, count: 4))
     
@@ -54,33 +52,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         sceneWidth  = self.scene?.frame.width
         sceneHeight = self.scene?.frame.height
-        cloudSpawnPoints = [UInt32]()
-        starSpawnPoints  = [UInt32]()
-        
-        // Generate a set of random spawn points for clouds and stars.
-        var i = 0
-        while i < 20 {
-            
-            var newCloudPoint = arc4random_uniform(UInt32(sceneWidth)) + 1
-            var newStarPoint  = arc4random_uniform(UInt32(sceneWidth)) + 1
-            
-            // Check to see if the random number generated for cloud spawn points already exists.
-            // If so, generate new random number until it is unique to the array.
-            while cloudSpawnPoints.contains(newCloudPoint) {
-                newCloudPoint = arc4random_uniform(UInt32(sceneWidth))
-            }
-            
-            // Check to see if the random number generated for star spawn points already exists.
-            // If so, generate new random number until it is unique.
-            while starSpawnPoints.contains(newStarPoint) {
-                newStarPoint = arc4random_uniform(UInt32(sceneWidth))
-            }
-            
-            cloudSpawnPoints.append(arc4random_uniform(UInt32(sceneWidth)))
-            starSpawnPoints.append(arc4random_uniform(UInt32(sceneWidth)))
-            
-            i += 1
-        }
         
         createGlider() // consider getting rid of function since it this code happens one time.
         
