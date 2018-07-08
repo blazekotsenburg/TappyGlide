@@ -185,6 +185,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             }
             
             let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
+//            let pop = PopUpNode(texture: nil, color: SKColor.white, size: CGSize(width: 500, height: 700))
+//            pop.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
+//            self.addChild(pop)
             self.view?.presentScene(gameOverScene, transition: transitionScene)
         }
     }
