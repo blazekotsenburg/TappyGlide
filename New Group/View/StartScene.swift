@@ -8,7 +8,6 @@
 
 import SpriteKit
 import GameplayKit
-import CoreImage
 
 class StartScene : SKScene {
     

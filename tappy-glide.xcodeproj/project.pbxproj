@@ -30,6 +30,9 @@
 		67E91B8320E5DCB20014C523 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E91B8220E5DCB20014C523 /* Extensions.swift */; };
 		67E91B8520E5E6460014C523 /* StartScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8420E5E6460014C523 /* StartScene.sks */; };
 		67E91B8720F05F780014C523 /* gliderHomeImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8620F05F780014C523 /* gliderHomeImage.png */; };
+		67E91B8920F26F500014C523 /* enemyAnimations.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8820F26F500014C523 /* enemyAnimations.atlas */; };
+		67E91B8B20F27B180014C523 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E91B8A20F27B180014C523 /* GameOverScene.swift */; };
+		67E91B8D20F27C190014C523 /* GameOverScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8C20F27C190014C523 /* GameOverScene.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +61,9 @@
 		67E91B8220E5DCB20014C523 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		67E91B8420E5E6460014C523 /* StartScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StartScene.sks; sourceTree = "<group>"; };
 		67E91B8620F05F780014C523 /* gliderHomeImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gliderHomeImage.png; sourceTree = "<group>"; };
+		67E91B8820F26F500014C523 /* enemyAnimations.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = enemyAnimations.atlas; sourceTree = "<group>"; };
+		67E91B8A20F27B180014C523 /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
+		67E91B8C20F27C190014C523 /* GameOverScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOverScene.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,10 +96,13 @@
 		67A67EA620034390000AB589 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				67E91B8820F26F500014C523 /* enemyAnimations.atlas */,
 				677C5DB1208D94C800F5B8D0 /* gliderAnimations.atlas */,
 				67A67EAA20034439000AB589 /* Scenes */,
 				67A67E7D1FFEEECB000AB589 /* GameScene.swift */,
+				67E91B7C20E5D8420014C523 /* StartScene.swift */,
 				67B31CBE2006B87D00E2CBD3 /* SKScoreLabel.swift */,
+				67E91B8A20F27B180014C523 /* GameOverScene.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -132,10 +141,10 @@
 			isa = PBXGroup;
 			children = (
 				67A67E791FFEEECB000AB589 /* GameScene.sks */,
-				67A67EA9200343C4000AB589 /* Star */,
-				67A67E94200324B5000AB589 /* GliderTrail.sks */,
-				67E91B7C20E5D8420014C523 /* StartScene.swift */,
 				67E91B8420E5E6460014C523 /* StartScene.sks */,
+				67A67E94200324B5000AB589 /* GliderTrail.sks */,
+				67E91B8C20F27C190014C523 /* GameOverScene.sks */,
+				67A67EA9200343C4000AB589 /* Star */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -227,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				67A67E831FFEEECB000AB589 /* Main.storyboard in Resources */,
+				67E91B8920F26F500014C523 /* enemyAnimations.atlas in Resources */,
 				67A67E9F20033EA1000AB589 /* StarLeft.sks in Resources */,
 				671989582017A11B00265362 /* Assets.xcassets in Resources */,
 				67A67E96200324B5000AB589 /* GliderTrail.sks in Resources */,
@@ -238,6 +248,7 @@
 				67A67EA320034217000AB589 /* StarUp.sks in Resources */,
 				67E91B8520E5E6460014C523 /* StartScene.sks in Resources */,
 				677C5DB2208D94C800F5B8D0 /* gliderAnimations.atlas in Resources */,
+				67E91B8D20F27C190014C523 /* GameOverScene.sks in Resources */,
 				67A67EA12003405D000AB589 /* StarRight.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -251,6 +262,7 @@
 			files = (
 				67A67E7E1FFEEECB000AB589 /* GameScene.swift in Sources */,
 				67E91B8020E5DC740014C523 /* CIColorRGBA.swift in Sources */,
+				67E91B8B20F27B180014C523 /* GameOverScene.swift in Sources */,
 				67B31CBF2006B87D00E2CBD3 /* SKScoreLabel.swift in Sources */,
 				67E91B8320E5DCB20014C523 /* Extensions.swift in Sources */,
 				677C2CF4201418CB009F273B /* StarSprite.swift in Sources */,

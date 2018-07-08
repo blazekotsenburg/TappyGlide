@@ -12,21 +12,26 @@ import CoreImage
 
 class GameScene : SKScene, SKPhysicsContactDelegate {
     
-    private var gliderSprite: SKSpriteNode!
-    private var gliderTrack:  SKSpriteNode!
-    private var sceneWidth:   CGFloat!
-    private var sceneHeight:  CGFloat!
-    private var model:        Model!
-    private var scoreLbl:     SKScoreLabel!
-    private var extraLife:    SKScoreLabel!
-    private var spawnTimer:   Timer!
-    private var enemyTexture: SKTexture!
+    private var gliderSprite:  SKSpriteNode!
+    private var gliderTrack:   SKSpriteNode!
+    private var sceneWidth:    CGFloat!
+    private var sceneHeight:   CGFloat!
+    private var model:         Model!
+    private var scoreLbl:      SKScoreLabel!
+    private var extraLife:     SKScoreLabel!
+    private var spawnTimer:    Timer!
+    private var enemyTexture:  SKTexture!
+    private var gameOverScene: SKScene!
     
     private var spriteAnimations: [String] = ["gliderSpriteJump0.png", "gliderSpriteJump1.png", "gliderSpriteJump2.png", "gliderSpriteJump3.png"]
+    private var enemyAnimations:  [String] = ["tappyGlideEnemy0.png", "tappyGlideEnemy1.png"]
     private var cloudImages:      [String] = ["cloud0.png", "cloud1.png"]
     
     private var gliderTextureAtlas = SKTextureAtlas()
     private var gliderTextureArray = [SKTexture]()
+    
+    private var enemyTextureAtlas  = SKTextureAtlas()
+    private var enemyTextureArray  = [SKTexture]()
     
     var speedUpdated: [Bool]       = Array(repeatElement(false, count: 4))
     
@@ -43,6 +48,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         // Get sprite animation frames ready to go
         gliderTextureAtlas = SKTextureAtlas(named: "gliderAnimations")
+        enemyTextureAtlas  = SKTextureAtlas(named: "enemyAnimations")
         enemyTexture       = SKTexture(imageNamed: "tappyGlideEnemy0.png")
         
         // Organize all glider images so that animations can be run on them in order.
@@ -50,6 +56,13 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             
             let name = "gliderSpriteJump\(i)"
             gliderTextureArray.append(SKTexture(imageNamed: name))
+        }
+        
+        // Organize all enemy images so that animations can be run on them in order.
+        for i in 0...enemyTextureAtlas.textureNames.count - 1 {
+            
+            let name = "tappyGlideEnemy\(i)"
+            enemyTextureArray.append(SKTexture(imageNamed: name))
         }
         
         sceneWidth  = self.scene?.frame.width
@@ -67,6 +80,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         scoreLbl.setSize(with: 128.0)
         extraLife.setSize(with: 48.0)
+        
+        gameOverScene = SKScene(fileNamed: "GameOverScene")
+        gameOverScene.scaleMode = .aspectFit
         
         self.addChild(gliderTrack)
         self.addChild(scoreLbl)
@@ -168,6 +184,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 self.gliderSprite.physicsBody?.velocity = CGVector(dx: -200.0, dy: -200.0)
             }
             
+            let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
+            self.view?.presentScene(gameOverScene, transition: transitionScene)
         }
     }
     
@@ -258,7 +276,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         enemySprite.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight + enemySprite.frame.height)
         enemySprite.zPosition = 5
         
-        enemySprite.run(SKAction.moveTo(y: -sceneHeight, duration: 6.0))
+        let animateEnemy:SKAction = SKAction.repeatForever(SKAction.animate(with: self.enemyTextureArray, timePerFrame: 0.15))
+        let enemyMovement:SKAction = SKAction.moveTo(y: -sceneHeight, duration: 6.0)
+        
+        enemySprite.run(SKAction.group([animateEnemy, enemyMovement]))
         
         return enemySprite
     }
