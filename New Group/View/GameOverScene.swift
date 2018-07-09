@@ -23,15 +23,14 @@ class GameOverScene : SKScene {
         sceneHeight = self.scene?.frame.height
         
         let gameOverLabelTexture:SKTexture = SKTexture(imageNamed: "gameOverLabel")
-        gameOverLabel = SKSpriteNode(texture: gameOverLabelTexture)
-        gameOverLabel.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight + gameOverLabel.frame.height)
+        gameOverLabel                      = SKSpriteNode(texture: gameOverLabelTexture)
+        gameOverLabel.position             = CGPoint(x: sceneWidth/2.0, y: sceneHeight + gameOverLabel.frame.height)
         
         let moveFromTop:SKAction = SKAction.moveTo(y: sceneHeight/2.0, duration: 1.5)
-//        let fadeIn:SKAction      = SKAction.fadeIn(withDuration: 10.0)
         
         self.scene?.backgroundColor = UIColor.black
         self.addChild(gameOverLabel)
-//        gameOverLabel.run(SKAction.group([moveFromTop, fadeIn]))
+
         gameOverLabel.run(moveFromTop)
         
         sparkles = SKEmitterNode(fileNamed: "GameOverSparkle")

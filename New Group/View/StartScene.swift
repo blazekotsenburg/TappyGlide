@@ -24,16 +24,16 @@ class StartScene : SKScene {
         sceneHeight = self.scene?.frame.height
         
         let gliderTexture: SKTexture = SKTexture(imageNamed: "gliderHomeImage.png")
-        glider = SKSpriteNode(texture: gliderTexture)
-        glider.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight*0.66)
+        glider                       = SKSpriteNode(texture: gliderTexture)
+        glider.position              = CGPoint(x: sceneWidth/2.0, y: sceneHeight*0.66)
         
         let titleTexture: SKTexture = SKTexture(imageNamed: "tappyGlideTitle.png")
-        title = SKSpriteNode(texture: titleTexture)
-        title.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight*0.85)
+        title                       = SKSpriteNode(texture: titleTexture)
+        title.position              = CGPoint(x: sceneWidth/2.0, y: sceneHeight*0.85)
         
         let startButtonTexture: SKTexture = SKTexture(imageNamed: "tappyGlideStart.png")
-        startButton = SKSpriteNode(texture: startButtonTexture)
-        startButton.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight*0.25)
+        startButton                       = SKSpriteNode(texture: startButtonTexture)
+        startButton.position              = CGPoint(x: sceneWidth/2.0, y: sceneHeight*0.25)
         
         let bounceUpAction:   SKAction = SKAction.move(to: CGPoint(x: startButton.position.x, y: startButton.position.y + 10), duration: 1.5)
         let bounceDownAction: SKAction = SKAction.move(to: CGPoint(x: startButton.position.x, y: startButton.position.y - 10), duration: 1.5)
@@ -47,12 +47,21 @@ class StartScene : SKScene {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let transition = SKTransition.fade(withDuration: 1.5)
-        gameScene = SKScene(fileNamed: "GameScene")
-        gameScene.scaleMode = .aspectFit
         
-        self.view?.presentScene(gameScene, transition: transition)
-        
+        if let touch = touches.first {
+            
+            let position = touch.location(in: self)
+            let node     = self.atPoint(position)
+            
+            if node == startButton {
+                
+                let transition      = SKTransition.fade(withDuration: 1.5)
+                gameScene           = SKScene(fileNamed: "GameScene")
+                gameScene.scaleMode = .aspectFit
+                
+                self.view?.presentScene(gameScene, transition: transition)
+            }
+        }
     }
     
     func generateGradientBackground() {

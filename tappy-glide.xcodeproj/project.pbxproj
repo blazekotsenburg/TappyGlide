@@ -29,7 +29,6 @@
 		67E91B8020E5DC740014C523 /* CIColorRGBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E91B7F20E5DC740014C523 /* CIColorRGBA.swift */; };
 		67E91B8320E5DCB20014C523 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E91B8220E5DCB20014C523 /* Extensions.swift */; };
 		67E91B8520E5E6460014C523 /* StartScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8420E5E6460014C523 /* StartScene.sks */; };
-		67E91B8720F05F780014C523 /* gliderHomeImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8620F05F780014C523 /* gliderHomeImage.png */; };
 		67E91B8920F26F500014C523 /* enemyAnimations.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8820F26F500014C523 /* enemyAnimations.atlas */; };
 		67E91B8B20F27B180014C523 /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E91B8A20F27B180014C523 /* GameOverScene.swift */; };
 		67E91B8D20F27C190014C523 /* GameOverScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8C20F27C190014C523 /* GameOverScene.sks */; };
@@ -63,7 +62,6 @@
 		67E91B7F20E5DC740014C523 /* CIColorRGBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CIColorRGBA.swift; sourceTree = "<group>"; };
 		67E91B8220E5DCB20014C523 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		67E91B8420E5E6460014C523 /* StartScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StartScene.sks; sourceTree = "<group>"; };
-		67E91B8620F05F780014C523 /* gliderHomeImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gliderHomeImage.png; sourceTree = "<group>"; };
 		67E91B8820F26F500014C523 /* enemyAnimations.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = enemyAnimations.atlas; sourceTree = "<group>"; };
 		67E91B8A20F27B180014C523 /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		67E91B8C20F27C190014C523 /* GameOverScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOverScene.sks; sourceTree = "<group>"; };
@@ -166,7 +164,6 @@
 				67A67EA7200343A6000AB589 /* Model */,
 				67A67EA620034390000AB589 /* View */,
 				67A67E95200324B5000AB589 /* Assets.xcassets */,
-				67E91B8620F05F780014C523 /* gliderHomeImage.png */,
 				67A67E771FFEEECB000AB589 /* AppDelegate.swift */,
 				67A67E811FFEEECB000AB589 /* Main.storyboard */,
 				67A67E861FFEEECB000AB589 /* LaunchScreen.storyboard */,
@@ -253,7 +250,6 @@
 				67E91B9120F2AA5F0014C523 /* Assets.xcassets in Resources */,
 				67A67E97200324B5000AB589 /* Assets.xcassets in Resources */,
 				67A67E881FFEEECB000AB589 /* LaunchScreen.storyboard in Resources */,
-				67E91B8720F05F780014C523 /* gliderHomeImage.png in Resources */,
 				67A67EA5200342CA000AB589 /* StarDown.sks in Resources */,
 				67E91B9020F2AA5F0014C523 /* GameOverSparkle.sks in Resources */,
 				67A67EA320034217000AB589 /* StarUp.sks in Resources */,

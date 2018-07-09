@@ -13,12 +13,12 @@ class SKScoreLabel: SKLabelNode {
     init(at position: CGPoint, with text: String?) {
         super.init()
         
-        self.text = text
-        self.color = UIColor(ciColor: CIColor(rgba: "#DDDDDD"))
-        self.alpha = 0.5
-        self.fontName = "Avenir"
+        self.text      = text
+        self.color     = UIColor(ciColor: CIColor(rgba: "#DDDDDD"))
+        self.alpha     = 0.5
+        self.fontName  = "Avenir"
         self.zPosition = -5
-        self.position = position
+        self.position  = position
     }
     
     required init?(coder aDecoder: NSCoder) {

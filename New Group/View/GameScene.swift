@@ -68,7 +68,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         sceneWidth  = self.scene?.frame.width
         sceneHeight = self.scene?.frame.height
         
-        createGlider() // consider getting rid of function since it this code happens one time.
+        createGlider()
         
         //Position the track for the glider on the screen, assign color, and set zPosition
         gliderTrack           = SKSpriteNode(color: UIColor.purple, size: CGSize(width: 20.0, height: sceneHeight))
@@ -269,17 +269,13 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     func spawnEnemySprite(with speed: CGFloat) -> SKSpriteNode {
         
-        //will need to consider making png's for enemies if -75 offset can not be fixed.
-//        let enemySprite   = Enemy(circleOfRadius: 25.0, at: CGPoint(x: sceneWidth/2.0 , y: sceneHeight)) //not sure why the -75 offset needs to be
-//        let enemySprite = Enemy(self.enemyTexture)
-//        let enemySprite: SKSpriteNode = SKSpriteNode(texture: self.enemyTexture)
         let enemySprite:Enemy = Enemy(texture: self.enemyTexture, color: SKColor.clear, size: CGSize(width: 75, height: 75))
-        enemySprite.speed = speed
-        enemySprite.name  = "enemy"
-        enemySprite.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight + enemySprite.frame.height)
+        enemySprite.speed     = speed
+        enemySprite.name      = "enemy"
+        enemySprite.position  = CGPoint(x: sceneWidth/2.0, y: sceneHeight + enemySprite.frame.height)
         enemySprite.zPosition = 5
         
-        let animateEnemy:SKAction = SKAction.repeatForever(SKAction.animate(with: self.enemyTextureArray, timePerFrame: 0.15))
+        let animateEnemy:SKAction  = SKAction.repeatForever(SKAction.animate(with: self.enemyTextureArray, timePerFrame: 0.15))
         let enemyMovement:SKAction = SKAction.moveTo(y: -sceneHeight, duration: 6.0)
         
         enemySprite.run(SKAction.group([animateEnemy, enemyMovement]))
@@ -301,21 +297,19 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         var spawnCloud = arc4random_uniform(20) + 1
         var spawnStar  = arc4random_uniform(20) + 1
-//        let spawnBound = Int(arc4random_uniform(UInt32(time)) % 19)
         
         if spawnCloud >= 1 && spawnCloud <= 10 {
             
             spawnCloud = UInt32(spawnCloud) & 1
             
-            let cloud   = SKSpriteNode(imageNamed: cloudImages[Int(spawnCloud)])
-            cloud.name  = "cloud"
-            cloud.speed = ((2.0 * CGFloat(spawnCloud)) + 1.0) - 0.25
-            let xSpawn  = CGFloat(arc4random_uniform(UInt32(self.sceneWidth)))
-            let move    = SKAction.moveTo(y: -self.sceneHeight, duration: 15.0)
-
-            cloud.run(move)
-
+            let cloud      = SKSpriteNode(imageNamed: cloudImages[Int(spawnCloud)])
+            cloud.name     = "cloud"
+            cloud.speed    = ((2.0 * CGFloat(spawnCloud)) + 1.0) - 0.25
+            let xSpawn     = CGFloat(arc4random_uniform(UInt32(self.sceneWidth)))
+            let move       = SKAction.moveTo(y: -self.sceneHeight, duration: 15.0)
             cloud.position = CGPoint(x: xSpawn, y: self.sceneHeight + frame.height/2.0)
+            
+            cloud.run(move)
 
             self.addChild(cloud)
         }
@@ -327,22 +321,17 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             spawnStar               = UInt32(spawnStar) % 19
             let scaleArr:[CGFloat]  = [0.15,0.25]
             let scaledSize:CGFloat  = scaleArr[Int(starScaleIndex)]
-            let xSpawn  = CGFloat(arc4random_uniform(UInt32(self.sceneWidth)))
+            let xSpawn              = CGFloat(arc4random_uniform(UInt32(self.sceneWidth)))
             
-            //Check bounds for spawning a star (+-15 from center screen)
-//            if (xSpawn > 0 && xSpawn < self.sceneWidth/2 - 15) || (xSpawn > self.sceneWidth/2 + 15 && xSpawn < self.sceneWidth) {
-//
             let star   = StarSprite(scale: scaledSize)
             star.name  = "star"
             star.speed = ((2.0 * CGFloat(starSpeed)) + 1.0) - 0.25
             
-            let move = SKAction.moveTo(y: -self.sceneHeight, duration: 15.0)
-            star.run(move)
-            
+            let move      = SKAction.moveTo(y: -self.sceneHeight, duration: 15.0)
             star.position = CGPoint(x: xSpawn, y: self.sceneHeight + frame.height/2.0)
             
+            star.run(move)
             self.addChild(star)
-//            }
         }
     }
     
@@ -389,108 +378,3 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         self.scoreLbl.animateScore()
     }
 }
-
-///******************* External Extensions *******************/
-//
-////
-////  The following extension is used to help provide a gradient background to an SKScene by creating
-////  a gradient SKTexture and then adding the texture to an SKShapeNode or SKSpriteNode.
-////
-////    Linear gradient texture
-////    Based on: https://gist.github.com/Tantas/7fc01803d6b559da48d6, https://gist.github.com/craiggrummitt/ad855e358004b5480960
-////
-////  Created by Maxim on 1/1/16.
-////  Copyright © 2016 Maxim Bilan. All rights reserved.
-////
-//
-//public extension SKTexture {
-//    
-//    public enum GradientDirection {
-//        case up
-//        case left
-//        case upLeft
-//        case upRight
-//    }
-//    
-//    convenience init(size: CGSize, color1: CIColor, color2: CIColor, direction: GradientDirection = .up) {
-//        
-//        let context = CIContext(options: nil)
-//        let filter = CIFilter(name: "CILinearGradient")
-//        var startVector: CIVector
-//        var endVector: CIVector
-//        
-//        filter!.setDefaults()
-//        
-//        switch direction {
-//        case .up:
-//            startVector = CIVector(x: size.width * 0.5, y: 0)
-//            endVector = CIVector(x: size.width * 0.5, y: size.height)
-//        case .left:
-//            startVector = CIVector(x: size.width, y: size.height * 0.5)
-//            endVector = CIVector(x: 0, y: size.height * 0.5)
-//        case .upLeft:
-//            startVector = CIVector(x: size.width, y: 0)
-//            endVector = CIVector(x: 0, y: size.height)
-//        case .upRight:
-//            startVector = CIVector(x: 0, y: 0)
-//            endVector = CIVector(x: size.width, y: size.height)
-//        }
-//        
-//        filter!.setValue(startVector, forKey: "inputPoint0")
-//        filter!.setValue(endVector, forKey: "inputPoint1")
-//        filter!.setValue(color1, forKey: "inputColor0")
-//        filter!.setValue(color2, forKey: "inputColor1")
-//        
-//        let image = context.createCGImage(filter!.outputImage!, from: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-//        self.init(cgImage: image!)
-//    }
-//}
-//
-////
-////  CIColorRGBA.swift
-////
-////
-////  Created by Maxim on 1/1/16.
-////  Copyright © 2016 Maxim Bilan. All rights reserved.
-////
-//
-//public extension CIColor {
-//    
-//    convenience init(rgba: String) {
-//        var red: CGFloat = 0.0
-//        var green: CGFloat = 0.0
-//        var blue: CGFloat = 0.0
-//        var alpha: CGFloat = 1.0
-//        if rgba.hasPrefix("#") {
-//            let index = rgba.index(rgba.startIndex, offsetBy: 1)
-//            let hex = rgba[index...]
-//            let scanner = Scanner(string: String(hex))
-//            var hexValue: CUnsignedLongLong = 0
-//            if scanner.scanHexInt64(&hexValue) {
-//                switch (hex.count) {
-//                case 3:
-//                    red = CGFloat((hexValue & 0xF00) >> 8) / 15.0
-//                    green = CGFloat((hexValue & 0x0F0) >> 4) / 15.0
-//                    blue = CGFloat(hexValue & 0x00F) / 15.0
-//                case 4:
-//                    red = CGFloat((hexValue & 0xF000) >> 12) / 15.0
-//                    green = CGFloat((hexValue & 0x0F00) >> 8) / 15.0
-//                    blue = CGFloat((hexValue & 0x00F0) >> 4) / 15.0
-//                    alpha = CGFloat(hexValue & 0x000F) / 15.0
-//                case 6:
-//                    red = CGFloat((hexValue & 0xFF0000) >> 16) / 255.0
-//                    green = CGFloat((hexValue & 0x00FF00) >> 8) / 255.0
-//                    blue = CGFloat(hexValue & 0x0000FF) / 255.0
-//                case 8:
-//                    red = CGFloat((hexValue & 0xFF000000) >> 24) / 255.0
-//                    green = CGFloat((hexValue & 0x00FF0000) >> 16) / 255.0
-//                    blue = CGFloat((hexValue & 0x0000FF00) >> 8) / 255.0
-//                    alpha = CGFloat(hexValue & 0x000000FF) / 255.0
-//                default:
-//                    break;
-//                }
-//            }
-//        }
-//        self.init(red:red, green:green, blue:blue, alpha:alpha)
-//    }
-//}
