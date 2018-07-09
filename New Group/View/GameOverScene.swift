@@ -25,20 +25,22 @@ class GameOverScene : SKScene {
         let gameOverLabelTexture:SKTexture = SKTexture(imageNamed: "gameOverLabel")
         gameOverLabel                      = SKSpriteNode(texture: gameOverLabelTexture)
         gameOverLabel.position             = CGPoint(x: sceneWidth/2.0, y: sceneHeight + gameOverLabel.frame.height)
+        gameOverLabel.alpha                = 0.0
         
-        let moveFromTop:SKAction = SKAction.moveTo(y: sceneHeight/2.0, duration: 1.5)
+        let moveFromTop: SKAction = SKAction.moveTo(y: sceneHeight/2.0, duration: 1.5)
+        let fadeIn:      SKAction = SKAction.fadeIn(withDuration: 1.5)
         
         self.scene?.backgroundColor = UIColor.black
         self.addChild(gameOverLabel)
 
-        gameOverLabel.run(moveFromTop)
+        gameOverLabel.run(SKAction.group([moveFromTop, fadeIn]))
         
-        sparkles = SKEmitterNode(fileNamed: "GameOverSparkle")
+        sparkles          = SKEmitterNode(fileNamed: "GameOverSparkle")
         sparkles.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
         
         self.addChild(sparkles)
         
-        startScene = SKScene(fileNamed: "StartScene")
+        startScene           = SKScene(fileNamed: "StartScene")
         startScene.scaleMode = .aspectFit
     }
     

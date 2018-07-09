@@ -55,11 +55,16 @@ class StartScene : SKScene {
             
             if node == startButton {
                 
-                let transition      = SKTransition.fade(withDuration: 1.5)
-                gameScene           = SKScene(fileNamed: "GameScene")
-                gameScene.scaleMode = .aspectFit
+                let scaleUp = SKAction.scale(by: 1.15, duration: 0.25)
                 
-                self.view?.presentScene(gameScene, transition: transition)
+                startButton.run(scaleUp, completion: {
+                    
+                    let transition           = SKTransition.fade(withDuration: 1.5)
+                    self.gameScene           = SKScene(fileNamed: "GameScene")
+                    self.gameScene.scaleMode = .aspectFit
+                    
+                    self.view?.presentScene(self.gameScene, transition: transition)
+                })
             }
         }
     }
