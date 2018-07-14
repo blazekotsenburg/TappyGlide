@@ -72,7 +72,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         sceneWidth  = self.scene?.frame.width
         sceneHeight = self.scene?.frame.height
-        print (sceneWidth)
         
         createGlider()
         
@@ -93,6 +92,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         pop = PopUpNode(texture: nil, color: SKColor.white, size: CGSize(width: 500, height: 700))
         pop.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
+        pop.name = "PopUpMenu"
+        self.addChild(pop)
         
         self.addChild(gliderTrack)
         self.addChild(scoreLbl)
@@ -183,28 +184,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         if collision == (self.gliderSprite.physicsBody?.categoryBitMask)! | 0x1 { // 0x1 = collisionBitMask for enemy sprites
             
-            // Let sprite animation go to right or left depending on score to make it seem random.
-            if (self.model.getScore() % 2 == 0) {
-                let rotateGlider:SKAction = SKAction.rotate(byAngle: 45.0, duration: 5)
-                self.gliderSprite.removeAllChildren()
-                self.gliderSprite.run(SKAction.repeatForever(rotateGlider))
-                self.gliderSprite.physicsBody?.velocity = CGVector(dx: 200.0, dy: -200.0)
-            }
-            else {
-                let rotateGlider:SKAction = SKAction.rotate(byAngle: -45.0, duration: 5)
-                self.gliderSprite.removeAllChildren()
-                self.gliderSprite.run(SKAction.repeatForever(rotateGlider))
-                self.gliderSprite.physicsBody?.velocity = CGVector(dx: -200.0, dy: -200.0)
-            }
-            
-            let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
-            
-            
-//            self.addChild(self.pop)
-            
-            UserDefaults.standard.set(model.getLifeCount(), forKey: "ExtraLifeCount")
-            gameOverScene.userData?.setValue(model.getScore(), forKey: "Score")
-            self.view?.presentScene(gameOverScene, transition: transitionScene)
+            self.scene?.isPaused = true
+            self.pop.isHidden = false
         }
     }
     
@@ -239,16 +220,64 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 self.animationIsInProgress = false
             })
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if let touch = touches.first {
             
             let position = touch.location(in: self)
             let node     = self.atPoint(position)
             
-            if node.name == "continueButton" {
-            print("it worked!")
+            if node.name == "continueLabel" {
+                
+                var removeEnemyArray = [SKNode]()
+                self.enumerateChildNodes(withName: "enemy") { (node:SKNode, nil) in
+
+                    if let current = node as? Enemy {
+                        removeEnemyArray.append(current)
+                    }
+                }
+                
+                self.removeChildren(in: removeEnemyArray)
+                self.pop.isHidden    = true
+                self.scene?.isPaused = false
+            }
+                
+            else if node.name == "noThanksLabel" {
+                
+                self.scene?.isPaused = false
+                self.pop.isHidden    = true
+                self.model.playerIsDead()
+                
+                // Let sprite animation go to right or left depending on score to make it seem random.
+                if (self.model.getScore() % 2 == 0) {
+                    let rotateGlider:SKAction = SKAction.rotate(byAngle: 10.0, duration: 1)
+                    self.gliderSprite.removeAllChildren()
+                    self.gliderSprite.physicsBody?.velocity = CGVector(dx: 200.0, dy: -200.0)
+                    
+                    self.gliderSprite.run(rotateGlider, completion: {
+                            let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
+                            UserDefaults.standard.set(self.model.getLifeCount(), forKey: "ExtraLifeCount")
+                            self.gameOverScene.userData?.setValue(self.model.getScore(), forKey: "Score")
+                            self.view?.presentScene(self.gameOverScene, transition: transitionScene)
+                        })
+                    
+                }
+                else {
+                    let rotateGlider:SKAction = SKAction.rotate(byAngle: -10.0, duration: 1)
+                    self.gliderSprite.removeAllChildren()
+                    self.gliderSprite.physicsBody?.velocity = CGVector(dx: -200.0, dy: -200.0)
+                    
+                    self.gliderSprite.run(rotateGlider, completion: {
+                        let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
+                        UserDefaults.standard.set(self.model.getLifeCount(), forKey: "ExtraLifeCount")
+                        self.gameOverScene.userData?.setValue(self.model.getScore(), forKey: "Score")
+                        self.view?.presentScene(self.gameOverScene, transition: transitionScene)
+                    })
+                }
+            }
         }
-    }
     }
     
     func generateGradientBackground() {
@@ -368,15 +397,18 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             //will need to make this a different loop so that Enemy can be used.
             if let current = node as? Enemy {
                 
-                if (current.position.y < self.gliderSprite.position.y) && (!current.hasBeenScored()) {
-                    self.model.updateScore()
-                    self.model.updateLifeCount()
-                    self.updateScoreLabel()
-                    current.setEnemyAsScored()
-                }
-                
-                if node.position.y < (0 - node.frame.size.height * 2.0) {
-                    node.removeFromParent()
+                if !self.model.hasPlayerDied() {
+                    
+                    if (current.position.y < self.gliderSprite.position.y) && (!current.hasBeenScored()) {
+                        self.model.updateScore()
+                        self.model.updateLifeCount()
+                        self.updateScoreLabel()
+                        current.setEnemyAsScored()
+                    }
+                    
+                    if node.position.y < (0 - node.frame.size.height * 2.0) {
+                        node.removeFromParent()
+                    }
                 }
             }
         }
