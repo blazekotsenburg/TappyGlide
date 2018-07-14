@@ -13,7 +13,7 @@ class GameOverScene : SKScene {
     
     private var sceneWidth:    CGFloat!
     private var sceneHeight:   CGFloat!
-    private var gameOverLabel: SKSpriteNode!
+    private var gameOverLabel: SKLabelNode!
     private var startScene:    SKScene!
     private var sparkles:      SKEmitterNode!
     private var scoreLabel:    SKLabelNode!
@@ -23,29 +23,32 @@ class GameOverScene : SKScene {
         sceneWidth  = self.scene?.frame.width
         sceneHeight = self.scene?.frame.height
         
-        let gameOverLabelTexture:SKTexture = SKTexture(imageNamed: "gameOverLabel")
-        gameOverLabel                      = SKSpriteNode(texture: gameOverLabelTexture)
-        gameOverLabel.position             = CGPoint(x: sceneWidth/2.0, y: sceneHeight + gameOverLabel.frame.height)
-        gameOverLabel.alpha                = 0.0
+        self.scene?.backgroundColor = UIColor.black
         
         let moveFromTop: SKAction = SKAction.moveTo(y: sceneHeight/2.0, duration: 1.5)
         let fadeIn:      SKAction = SKAction.fadeIn(withDuration: 1.5)
+
+        gameOverLabel           = SKLabelNode(text: "Game Over")
+        gameOverLabel.fontColor = UIColor.white
+        gameOverLabel.alpha     = 0.0
+        gameOverLabel.fontSize  = 90
+        gameOverLabel.fontName  = "SpaceRangerItalic"
+        gameOverLabel.position  = CGPoint(x: sceneWidth/2.0, y: sceneHeight + gameOverLabel.frame.height)
+        gameOverLabel.run(SKAction.group([moveFromTop, fadeIn]))
+        self.addChild(gameOverLabel)
         
         scoreLabel = SKLabelNode(text: "Score: \(self.userData?.value(forKey: "Score") as! Int)")
         scoreLabel.fontColor = UIColor.white
-        scoreLabel.alpha     = 0
+        scoreLabel.alpha     = 0.0
         scoreLabel.fontSize  = 45
+        scoreLabel.fontName  = "SpaceRangerItalic"
         scoreLabel.position  = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.5)
         scoreLabel.run(SKAction.fadeIn(withDuration: 2.5))
         self.addChild(scoreLabel)
         
-        self.scene?.backgroundColor = UIColor.black
-        self.addChild(gameOverLabel)
-
-        gameOverLabel.run(SKAction.group([moveFromTop, fadeIn]))
-        
-        sparkles          = SKEmitterNode(fileNamed: "GameOverSparkle")
-        sparkles.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
+        sparkles           = SKEmitterNode(fileNamed: "GameOverSparkle")
+        sparkles.position  = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
+        sparkles.zPosition = -1
         
         self.addChild(sparkles)
         

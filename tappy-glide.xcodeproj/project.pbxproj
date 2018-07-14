@@ -35,6 +35,7 @@
 		67E91B9020F2AA5F0014C523 /* GameOverSparkle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8E20F2AA5F0014C523 /* GameOverSparkle.sks */; };
 		67E91B9120F2AA5F0014C523 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8F20F2AA5F0014C523 /* Assets.xcassets */; };
 		67E91B9920F2BFFE0014C523 /* PopUpNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E91B9820F2BFFE0014C523 /* PopUpNode.swift */; };
+		67E91B9C20FAC0E20014C523 /* spacerangerital.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B9B20FAC0E20014C523 /* spacerangerital.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		67E91B8E20F2AA5F0014C523 /* GameOverSparkle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameOverSparkle.sks; sourceTree = "<group>"; };
 		67E91B8F20F2AA5F0014C523 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		67E91B9820F2BFFE0014C523 /* PopUpNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpNode.swift; sourceTree = "<group>"; };
+		67E91B9B20FAC0E20014C523 /* spacerangerital.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = spacerangerital.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 		67A67E6B1FFEEECB000AB589 = {
 			isa = PBXGroup;
 			children = (
+				67E91B9A20FAC0500014C523 /* Fonts */,
 				67A67EAB200344EC000AB589 /* tappy-glide */,
 				67A67E751FFEEECB000AB589 /* Products */,
 			);
@@ -182,6 +185,14 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		67E91B9A20FAC0500014C523 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				67E91B9B20FAC0E20014C523 /* spacerangerital.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -251,6 +262,7 @@
 				67A67E97200324B5000AB589 /* Assets.xcassets in Resources */,
 				67A67E881FFEEECB000AB589 /* LaunchScreen.storyboard in Resources */,
 				67A67EA5200342CA000AB589 /* StarDown.sks in Resources */,
+				67E91B9C20FAC0E20014C523 /* spacerangerital.ttf in Resources */,
 				67E91B9020F2AA5F0014C523 /* GameOverSparkle.sks in Resources */,
 				67A67EA320034217000AB589 /* StarUp.sks in Resources */,
 				67E91B8520E5E6460014C523 /* StartScene.sks in Resources */,
