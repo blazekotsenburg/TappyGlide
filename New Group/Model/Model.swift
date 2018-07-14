@@ -12,12 +12,14 @@ class Model {
     private var score:          Int
     private var extraLifeCount: Int
     private var hasExtraLife:   Bool
+    private var isPlayerDead:   Bool
     
     init() {
 
         extraLifeCount = 0
         score          = 0
         hasExtraLife   = false
+        isPlayerDead   = false
     }
     
     func getScore() -> Int {
@@ -47,5 +49,13 @@ class Model {
     
     func setLifeCount(score: Int) {
         extraLifeCount = score
+    }
+    
+    func hasPlayerDied() -> Bool{
+        return isPlayerDead
+    }
+    
+    func playerIsDead() {
+        isPlayerDead = true
     }
 }
