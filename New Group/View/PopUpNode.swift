@@ -25,6 +25,7 @@ class PopUpNode : SKSpriteNode {
         
         continueButton = SKSpriteNode(color: SKColor.red, size: CGSize(width: 100, height: 100))
         continueButton?.position = CGPoint(x: 0, y: -size.height*0.25)
+        continueButton.name = "continueButton"
         self.addChild(continueButton)
     }
     

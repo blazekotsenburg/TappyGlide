@@ -22,6 +22,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     private var spawnTimer:    Timer!
     private var enemyTexture:  SKTexture!
     private var gameOverScene: SKScene!
+    private var pop:           PopUpNode!
     
     private var spriteAnimations: [String] = ["gliderSpriteJump0.png", "gliderSpriteJump1.png", "gliderSpriteJump2.png", "gliderSpriteJump3.png"]
     private var enemyAnimations:  [String] = ["tappyGlideEnemy0.png", "tappyGlideEnemy1.png"]
@@ -89,6 +90,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         gameOverScene = SKScene(fileNamed: "GameOverScene")
         gameOverScene.scaleMode = .aspectFit
+        
+        pop = PopUpNode(texture: nil, color: SKColor.white, size: CGSize(width: 500, height: 700))
+        pop.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
         
         self.addChild(gliderTrack)
         self.addChild(scoreLbl)
@@ -194,9 +198,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             }
             
             let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
-//            let pop = PopUpNode(texture: nil, color: SKColor.white, size: CGSize(width: 500, height: 700))
-//            pop.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
-//            self.addChild(pop)
+            
+            
+//            self.addChild(self.pop)
             
             UserDefaults.standard.set(model.getLifeCount(), forKey: "ExtraLifeCount")
             gameOverScene.userData?.setValue(model.getScore(), forKey: "Score")
@@ -235,6 +239,16 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 self.animationIsInProgress = false
             })
         }
+        
+        if let touch = touches.first {
+            
+            let position = touch.location(in: self)
+            let node     = self.atPoint(position)
+            
+            if node.name == "continueButton" {
+            print("it worked!")
+        }
+    }
     }
     
     func generateGradientBackground() {
