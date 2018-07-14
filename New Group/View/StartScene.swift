@@ -20,6 +20,10 @@ class StartScene : SKScene {
     
     override func didMove(to view: SKView) {
         
+        //should read from the userDefaults here to set userData for scene ie self.userData = userdefaults...
+        let userDefaults = UserDefaults.standard
+        self.userData = self.userData ?? NSMutableDictionary()
+        self.userData?.setValue(userDefaults.integer(forKey: "ExtraLifeCount"), forKey: "ExtraLifeCount")
         sceneWidth  = self.scene?.frame.width
         sceneHeight = self.scene?.frame.height
         
@@ -62,7 +66,8 @@ class StartScene : SKScene {
                     let transition           = SKTransition.fade(withDuration: 1.5)
                     self.gameScene           = SKScene(fileNamed: "GameScene")
                     self.gameScene.scaleMode = .aspectFit
-                    
+                    self.gameScene.userData  = self.userData
+                    print(self.userData?.value(forKey: "ExtraLifeCount") as! Int)
                     self.view?.presentScene(self.gameScene, transition: transition)
                 })
             }
@@ -70,9 +75,9 @@ class StartScene : SKScene {
     }
     
     func generateGradientBackground() {
-        
-        let topColor    = CIColor(rgba: "#22A8AD")
-        let bottomColor = CIColor(rgba: "#134E5E")
+        //#02080D
+        let topColor    = CIColor(rgba: "#134E5E")
+        let bottomColor = CIColor(rgba: "#02080D")
         let texture     = SKTexture(size: frame.size, color1: topColor, color2: bottomColor, direction: SKTexture.GradientDirection.up)
         
         texture.filteringMode = .nearest

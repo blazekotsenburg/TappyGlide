@@ -42,7 +42,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         
+        let storedExtraLifeCount = self.userData?.value(forKey: "ExtraLifeCount") as! Int // breaks here as well
+        
         model = Model()
+        model.setLifeCount(score: storedExtraLifeCount)
+
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         self.physicsWorld.contactDelegate = self
         
@@ -75,8 +79,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         gliderTrack.position  = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
         gliderTrack.zPosition = 4.0
         
+        
         scoreLbl = SKScoreLabel(at: CGPoint(x: sceneWidth/4.0, y: sceneHeight/2.0) , with: "\(model.getScore())")
-        extraLife = SKScoreLabel(at: CGPoint(x: sceneWidth * 0.85, y: sceneHeight * 0.9), with:"0/500")
+        extraLife = SKScoreLabel(at: CGPoint(x: sceneWidth * 0.85, y: sceneHeight * 0.9), with:"\(model.getLifeCount())/500")
         
         scoreLbl.setSize(with: 128.0)
         extraLife.setSize(with: 48.0)
@@ -89,6 +94,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         self.addChild(extraLife)
         generateGradientBackground()
         
+//        let topColor    = CIColor(rgba: "#134E5E")
+//        let bottomColor = CIColor(rgba: "#02080D")
+        
         spawnTimer = Timer()
     }
     
@@ -96,7 +104,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         guard spawnTimer == nil else { return }
         // After a move towards maintainting collection of settings, change something in new interval based on score so the
         // spawn rates get slightly faster but still playable.
-        var newInterval = TimeInterval(arc4random_uniform(7) + 3)/5.0
+        var newInterval = TimeInterval(arc4random_uniform(6) + 3)/5.0
         if (abs(prevTime - newInterval) <= 0.6) {
             newInterval = 0.8
         }
@@ -188,6 +196,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 //            let pop = PopUpNode(texture: nil, color: SKColor.white, size: CGSize(width: 500, height: 700))
 //            pop.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
 //            self.addChild(pop)
+            
+            UserDefaults.standard.set(model.getLifeCount(), forKey: "ExtraLifeCount")
+            gameOverScene.userData?.setValue(model.getScore(), forKey: "Score")
             self.view?.presentScene(gameOverScene, transition: transitionScene)
         }
     }

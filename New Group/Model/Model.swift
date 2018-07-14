@@ -14,7 +14,7 @@ class Model {
     private var hasExtraLife:   Bool
     
     init() {
-        
+
         extraLifeCount = 0
         score          = 0
         hasExtraLife   = false
@@ -43,5 +43,10 @@ class Model {
     
     func getLifeCount() -> Int {
         return extraLifeCount
+    }
+    
+    func setLifeCount(score: Int) {
+        extraLifeCount = score
+        print(extraLifeCount)
     }
 }

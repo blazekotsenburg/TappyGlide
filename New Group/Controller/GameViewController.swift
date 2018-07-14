@@ -12,17 +12,25 @@ import GameplayKit
 
 class GameViewController: UIViewController {
 
+    let userDefaults: UserDefaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if !isKeyPresentInUserDefaults(key: "ExtraLifeCount") {
+            userDefaults.set(0, forKey: "ExtraLifeCount")
+//            print(userDefaults.integer(forKey: "ExtraLifeCount"))
+        }
+        
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "StartScene") {
+            if let startScene = SKScene(fileNamed: "StartScene") {
                 // Set the scale mode to scale to fit the window
-                scene.scaleMode = .aspectFill
+                startScene.scaleMode = .aspectFill
                 
-                // Present the scene
-                view.presentScene(scene)
+//                print(startScene.userData?.value(forKey: "ExtraLifeCount") as? Int ?? 0)
+                // Present the startScene
+                view.presentScene(startScene)
                 
             }
             
@@ -53,4 +61,9 @@ class GameViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    
+    func isKeyPresentInUserDefaults(key: String) -> Bool {
+        return UserDefaults.standard.object(forKey: key) != nil
+    }
+
 }

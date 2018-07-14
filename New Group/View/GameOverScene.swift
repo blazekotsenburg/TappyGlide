@@ -42,6 +42,8 @@ class GameOverScene : SKScene {
         
         startScene           = SKScene(fileNamed: "StartScene")
         startScene.scaleMode = .aspectFit
+        
+//        print(self.userData?.value(forKey: "Score") as! Int) // this is broken
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
