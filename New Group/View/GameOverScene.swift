@@ -16,6 +16,7 @@ class GameOverScene : SKScene {
     private var gameOverLabel: SKSpriteNode!
     private var startScene:    SKScene!
     private var sparkles:      SKEmitterNode!
+    private var scoreLabel:    SKLabelNode!
     
     override func didMove(to view: SKView) {
         
@@ -29,6 +30,14 @@ class GameOverScene : SKScene {
         
         let moveFromTop: SKAction = SKAction.moveTo(y: sceneHeight/2.0, duration: 1.5)
         let fadeIn:      SKAction = SKAction.fadeIn(withDuration: 1.5)
+        
+        scoreLabel = SKLabelNode(text: "Score: \(self.userData?.value(forKey: "Score") as! Int)")
+        scoreLabel.fontColor = UIColor.white
+        scoreLabel.alpha     = 0
+        scoreLabel.fontSize  = 45
+        scoreLabel.position  = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.5)
+        scoreLabel.run(SKAction.fadeIn(withDuration: 2.5))
+        self.addChild(scoreLabel)
         
         self.scene?.backgroundColor = UIColor.black
         self.addChild(gameOverLabel)

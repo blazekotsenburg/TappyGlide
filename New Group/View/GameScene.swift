@@ -80,7 +80,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         gliderTrack.position  = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
         gliderTrack.zPosition = 4.0
         
-        
         scoreLbl = SKScoreLabel(at: CGPoint(x: sceneWidth/4.0, y: sceneHeight/2.0) , with: "\(model.getScore())")
         extraLife = SKScoreLabel(at: CGPoint(x: sceneWidth * 0.85, y: sceneHeight * 0.9), with:"\(model.getLifeCount())/500")
         
@@ -89,6 +88,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         gameOverScene = SKScene(fileNamed: "GameOverScene")
         gameOverScene.scaleMode = .aspectFit
+        gameOverScene.userData = self.userData
         
         pop = PopUpNode(texture: nil, color: SKColor.white, size: CGSize(width: 500, height: 700))
         pop.position = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
@@ -250,6 +250,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 self.pop.isHidden    = true
                 self.model.playerIsDead()
                 
+                //This does not get processed until after the touches began function finishes running.
+                UserDefaults.standard.set(self.model.getLifeCount(), forKey: "ExtraLifeCount")
+                self.gameOverScene.userData?.setValue(self.model.getScore(), forKey: "Score")
+                
                 // Let sprite animation go to right or left depending on score to make it seem random.
                 if (self.model.getScore() % 2 == 0) {
                     let rotateGlider:SKAction = SKAction.rotate(byAngle: 10.0, duration: 1)
@@ -258,8 +262,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     
                     self.gliderSprite.run(rotateGlider, completion: {
                             let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
-                            UserDefaults.standard.set(self.model.getLifeCount(), forKey: "ExtraLifeCount")
-                            self.gameOverScene.userData?.setValue(self.model.getScore(), forKey: "Score")
                             self.view?.presentScene(self.gameOverScene, transition: transitionScene)
                         })
                     
@@ -271,8 +273,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     
                     self.gliderSprite.run(rotateGlider, completion: {
                         let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
-                        UserDefaults.standard.set(self.model.getLifeCount(), forKey: "ExtraLifeCount")
-                        self.gameOverScene.userData?.setValue(self.model.getScore(), forKey: "Score")
                         self.view?.presentScene(self.gameOverScene, transition: transitionScene)
                     })
                 }
