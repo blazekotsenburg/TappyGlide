@@ -47,6 +47,5 @@ class Model {
     
     func setLifeCount(score: Int) {
         extraLifeCount = score
-        print(extraLifeCount)
     }
 }

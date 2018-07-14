@@ -67,7 +67,6 @@ class StartScene : SKScene {
                     self.gameScene           = SKScene(fileNamed: "GameScene")
                     self.gameScene.scaleMode = .aspectFit
                     self.gameScene.userData  = self.userData
-                    print(self.userData?.value(forKey: "ExtraLifeCount") as! Int)
                     self.view?.presentScene(self.gameScene, transition: transition)
                 })
             }

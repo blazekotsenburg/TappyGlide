@@ -42,7 +42,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         
-        let storedExtraLifeCount = self.userData?.value(forKey: "ExtraLifeCount") as! Int // breaks here as well
+        let storedExtraLifeCount = self.userData?.value(forKey: "ExtraLifeCount") as! Int
         
         model = Model()
         model.setLifeCount(score: storedExtraLifeCount)
