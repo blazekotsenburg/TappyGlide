@@ -71,6 +71,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         sceneWidth  = self.scene?.frame.width
         sceneHeight = self.scene?.frame.height
+        print (sceneWidth)
         
         createGlider()
         

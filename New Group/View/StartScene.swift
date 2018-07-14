@@ -16,6 +16,7 @@ class StartScene : SKScene {
     private var glider:       SKSpriteNode!
     private var title:        SKSpriteNode!
     private var startButton:  SKSpriteNode!
+    private var gliderTrack:  SKSpriteNode!
     private var gameScene:    SKScene!
     
     override func didMove(to view: SKView) {
@@ -39,6 +40,10 @@ class StartScene : SKScene {
         startButton                       = SKSpriteNode(texture: startButtonTexture)
         startButton.position              = CGPoint(x: sceneWidth/2.0, y: sceneHeight*0.25)
         
+        let gliderTrackTexture: SKTexture = SKTexture(imageNamed: "tappyGlideStartTrack.png")
+        gliderTrack                       = SKSpriteNode(texture: gliderTrackTexture)
+        gliderTrack.position              = CGPoint(x: glider.position.x, y: glider.position.y - 300)
+        
         let bounceUpAction:   SKAction = SKAction.move(to: CGPoint(x: startButton.position.x, y: startButton.position.y + 10), duration: 1.5)
         let bounceDownAction: SKAction = SKAction.move(to: CGPoint(x: startButton.position.x, y: startButton.position.y - 10), duration: 1.5)
         
@@ -48,6 +53,7 @@ class StartScene : SKScene {
         self.addChild(glider)
         self.addChild(title)
         self.addChild(startButton)
+        self.addChild(gliderTrack)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
