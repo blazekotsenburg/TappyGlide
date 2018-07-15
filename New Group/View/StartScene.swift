@@ -25,6 +25,8 @@ class StartScene : SKScene {
         let userDefaults = UserDefaults.standard
         self.userData = self.userData ?? NSMutableDictionary()
         self.userData?.setValue(userDefaults.integer(forKey: "ExtraLifeCount"), forKey: "ExtraLifeCount")
+        self.userData?.setValue(userDefaults.integer(forKey: "HighScore"), forKey: "HighScore")
+        
         sceneWidth  = self.scene?.frame.width
         sceneHeight = self.scene?.frame.height
         

@@ -17,9 +17,11 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if !isKeyPresentInUserDefaults(key: "ExtraLifeCount") {
-            userDefaults.set(0, forKey: "ExtraLifeCount")
-//            print(userDefaults.integer(forKey: "ExtraLifeCount"))
+        if !(isKeyPresentInUserDefaults(key: "ExtraLifeCount") &&
+             isKeyPresentInUserDefaults(key: "HighScore")) {
+            
+            userDefaults.setValue(0,     forKey: "ExtraLifeCount")
+            userDefaults.setValue(0,     forKey: "HighScore")
         }
         
         if let view = self.view as! SKView? {
@@ -27,11 +29,8 @@ class GameViewController: UIViewController {
             if let startScene = SKScene(fileNamed: "StartScene") {
                 // Set the scale mode to scale to fit the window
                 startScene.scaleMode = .aspectFill
-                
-//                print(startScene.userData?.value(forKey: "ExtraLifeCount") as? Int ?? 0)
                 // Present the startScene
                 view.presentScene(startScene)
-                
             }
             
             view.ignoresSiblingOrder = true

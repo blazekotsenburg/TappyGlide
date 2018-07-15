@@ -43,9 +43,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         
         let storedExtraLifeCount = self.userData?.value(forKey: "ExtraLifeCount") as! Int
+        let storedHighScore      = self.userData?.value(forKey: "HighScore")      as! Int
         
         model = Model()
         model.setLifeCount(score: storedExtraLifeCount)
+        model.updateHighScore(newHighScore: storedHighScore)
 
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         self.physicsWorld.contactDelegate = self
@@ -243,7 +245,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 
                 //This does not get processed until after the touches began function finishes running.
                 UserDefaults.standard.set(self.model.getLifeCount(), forKey: "ExtraLifeCount")
+                UserDefaults.standard.set(self.model.getHighScore(), forKey: "HighScore")
                 self.gameOverScene.userData?.setValue(self.model.getScore(), forKey: "Score")
+                self.gameOverScene.userData?.setValue(self.model.getHighScore(), forKey: "HighScore")
+                self.gameOverScene.userData?.setValue(model.wasHighScoreBeaten(), forKey: "WasHighScoreBeaten")
                 
                 // Let sprite animation go to right or left depending on score to make it seem random.
                 if (self.model.getScore() % 2 == 0) {

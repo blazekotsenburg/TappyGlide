@@ -10,14 +10,18 @@ import SpriteKit
 
 class Model {
     private var score:          Int
+    private var highScore:      Int
     private var extraLifeCount: Int
+    private var highScoreBeat:  Bool
     private var hasExtraLife:   Bool
     private var isPlayerDead:   Bool
     
     init() {
 
-        extraLifeCount = 0
         score          = 0
+        highScore      = 0
+        extraLifeCount = 0
+        highScoreBeat  = false
         hasExtraLife   = false
         isPlayerDead   = false
     }
@@ -32,6 +36,10 @@ class Model {
     
     func updateScore() {
         score += 1
+        if score > highScore {
+            highScoreBeat = true
+            updateHighScore(newHighScore: score)
+        }
     }
     
     func updateLifeCount() {
@@ -41,6 +49,18 @@ class Model {
             extraLifeCount = 0
             hasExtraLife   = true
         }
+    }
+    
+    func getHighScore()->Int {
+        return highScore
+    }
+    
+    func updateHighScore(newHighScore: Int) {
+        highScore = newHighScore
+    }
+    
+    func wasHighScoreBeaten()->Bool {
+        return highScoreBeat
     }
     
     func getLifeCount() -> Int {

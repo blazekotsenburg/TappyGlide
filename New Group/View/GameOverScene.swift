@@ -37,7 +37,12 @@ class GameOverScene : SKScene {
         gameOverLabel.run(SKAction.group([moveFromTop, fadeIn]))
         self.addChild(gameOverLabel)
         
-        scoreLabel = SKLabelNode(text: "Score: \(self.userData?.value(forKey: "Score") as! Int)")
+        let highScore     = self.userData?.value(forKey: "HighScore") as! Int
+        let score         = self.userData?.value(forKey: "Score") as! Int
+        
+        let scoreString   = (self.userData?.value(forKey: "WasHighScoreBeaten") as! Bool) ? "New High Score: \(highScore)" : "Score: \(score)"
+        
+        scoreLabel = SKLabelNode(text: scoreString)
         scoreLabel.fontColor = UIColor.white
         scoreLabel.alpha     = 0.0
         scoreLabel.fontSize  = 45
