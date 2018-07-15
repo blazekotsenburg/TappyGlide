@@ -9,8 +9,9 @@
 import SpriteKit
 import GameplayKit
 import CoreImage
+import GoogleMobileAds
 
-class GameScene : SKScene, SKPhysicsContactDelegate {
+class GameScene : SKScene, SKPhysicsContactDelegate, GADRewardBasedVideoAdDelegate {
     
     private var gliderSprite:  SKSpriteNode!
     private var gliderTrack:   SKSpriteNode!
@@ -23,6 +24,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     private var enemyTexture:  SKTexture!
     private var gameOverScene: SKScene!
     private var pop:           PopUpNode!
+    var rewardBasedAd:         GADRewardBasedVideoAd!
     
     private var spriteAnimations: [String] = ["gliderSpriteJump0.png", "gliderSpriteJump1.png", "gliderSpriteJump2.png", "gliderSpriteJump3.png"]
     private var cloudImages:      [String] = ["cloud0.png", "cloud1.png"]
@@ -41,6 +43,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     private var currSpeed:             CGFloat      = 1.0
     
     override func didMove(to view: SKView) {
+        
+        rewardBasedAd          = GADRewardBasedVideoAd.sharedInstance()
+        rewardBasedAd.delegate = self
         
         let storedExtraLifeCount = self.userData?.value(forKey: "ExtraLifeCount") as! Int
         let storedHighScore      = self.userData?.value(forKey: "HighScore")      as! Int
@@ -231,10 +236,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                         removeEnemyArray.append(current)
                     }
                 }
-                
+                rewardBasedAd.load(GADRequest(), withAdUnitID: "ca-app-pub-3940256099942544/1712485313")
+
                 self.removeChildren(in: removeEnemyArray)
                 self.pop.isHidden    = true
-                self.scene?.isPaused = false
+//                self.scene?.isPaused = false
             }
                 
             else if node.name == "noThanksLabel" {
@@ -431,5 +437,41 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         self.extraLife.text = "\(self.model.getLifeCount())/500" //prints parentheses
         
         self.scoreLbl.animateScore()
+    }
+    
+    /********************* GADRewardBasedVideoAdDelegat required funcs *********************/
+ 
+    func rewardBasedVideoAd(_ rewardBasedVideoAd: GADRewardBasedVideoAd,
+                            didRewardUserWith reward: GADAdReward) {
+        print("Reward received with currency: \(reward.type), amount \(reward.amount).")
+    }
+    
+    func rewardBasedVideoAdDidReceive(_ rewardBasedVideoAd:GADRewardBasedVideoAd) {
+        print("Reward based video ad is received.")
+    }
+    
+    func rewardBasedVideoAdDidOpen(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        print("Opened reward based video ad.")
+    }
+    
+    func rewardBasedVideoAdDidStartPlaying(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        print("Reward based video ad started playing.")
+    }
+    
+    func rewardBasedVideoAdDidCompletePlaying(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        print("Reward based video ad has completed.")
+    }
+    
+    func rewardBasedVideoAdDidClose(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        print("Reward based video ad is closed.")
+    }
+    
+    func rewardBasedVideoAdWillLeaveApplication(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        print("Reward based video ad will leave application.")
+    }
+    
+    func rewardBasedVideoAd(_ rewardBasedVideoAd: GADRewardBasedVideoAd,
+                            didFailToLoadWithError error: Error) {
+        print("Reward based video ad failed to load.")
     }
 }

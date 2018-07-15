@@ -64,5 +64,5 @@ class GameViewController: UIViewController {
     func isKeyPresentInUserDefaults(key: String) -> Bool {
         return UserDefaults.standard.object(forKey: key) != nil
     }
-
+    
 }

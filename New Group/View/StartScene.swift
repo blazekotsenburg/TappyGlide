@@ -13,6 +13,7 @@ class StartScene : SKScene {
     
     private var sceneWidth:   CGFloat!
     private var sceneHeight:  CGFloat!
+    private var highScore:    SKLabelNode!
     private var glider:       SKSpriteNode!
     private var title:        SKSpriteNode!
     private var startButton:  SKSpriteNode!
@@ -40,7 +41,7 @@ class StartScene : SKScene {
         
         let startButtonTexture: SKTexture = SKTexture(imageNamed: "tappyGlideStart.png")
         startButton                       = SKSpriteNode(texture: startButtonTexture)
-        startButton.position              = CGPoint(x: sceneWidth/2.0, y: sceneHeight*0.25)
+        startButton.position              = CGPoint(x: sceneWidth/2.0, y: sceneHeight*0.15)
         
         let gliderTrackTexture: SKTexture = SKTexture(imageNamed: "tappyGlideStartTrack.png")
         gliderTrack                       = SKSpriteNode(texture: gliderTrackTexture)
@@ -50,6 +51,9 @@ class StartScene : SKScene {
         let bounceDownAction: SKAction = SKAction.move(to: CGPoint(x: startButton.position.x, y: startButton.position.y - 10), duration: 1.5)
         
         startButton.run(SKAction.repeatForever(SKAction.sequence([bounceUpAction, bounceDownAction])))
+        
+        highScore = SKLabelNode(text: "High Score: \(userDefaults.integer(forKey: "HighScore"), forKey: "HighScore")")
+        //Finish implementing the highscore for the title screen.  Will need an image for highscore to match other titles
         
         generateGradientBackground()
         self.addChild(glider)
