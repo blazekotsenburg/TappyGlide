@@ -25,7 +25,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     private var pop:           PopUpNode!
     
     private var spriteAnimations: [String] = ["gliderSpriteJump0.png", "gliderSpriteJump1.png", "gliderSpriteJump2.png", "gliderSpriteJump3.png"]
-    private var enemyAnimations:  [String] = ["tappyGlideEnemy0.png", "tappyGlideEnemy1.png"]
     private var cloudImages:      [String] = ["cloud0.png", "cloud1.png"]
     
     private var gliderTextureAtlas = SKTextureAtlas()
@@ -53,21 +52,13 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         // Get sprite animation frames ready to go
         gliderTextureAtlas = SKTextureAtlas(named: "gliderAnimations")
-        enemyTextureAtlas  = SKTextureAtlas(named: "enemyAnimations")
-        enemyTexture       = SKTexture(imageNamed: "tappyGlideEnemy0.png")
+        enemyTexture       = SKTexture(imageNamed: "tappyGlideEnemy.png")
         
         // Organize all glider images so that animations can be run on them in order.
         for i in 0...gliderTextureAtlas.textureNames.count - 1 {
             
             let name = "gliderSpriteJump\(i)"
             gliderTextureArray.append(SKTexture(imageNamed: name))
-        }
-        
-        // Organize all enemy images so that animations can be run on them in order.
-        for i in 0...enemyTextureAtlas.textureNames.count - 1 {
-            
-            let name = "tappyGlideEnemy\(i)"
-            enemyTextureArray.append(SKTexture(imageNamed: name))
         }
         
         sceneWidth  = self.scene?.frame.width
@@ -330,10 +321,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         enemySprite.position  = CGPoint(x: sceneWidth/2.0, y: sceneHeight + enemySprite.frame.height)
         enemySprite.zPosition = 5
         
-        let animateEnemy:SKAction  = SKAction.repeatForever(SKAction.animate(with: self.enemyTextureArray, timePerFrame: 0.15))
+//        let animateEnemy:SKAction  = SKAction.repeatForever(SKAction.animate(with: self.enemyTextureArray, timePerFrame: 0.15))
         let enemyMovement:SKAction = SKAction.moveTo(y: -sceneHeight, duration: 6.0)
         
-        enemySprite.run(SKAction.group([animateEnemy, enemyMovement]))
+//        enemySprite.run(SKAction.group([animateEnemy, enemyMovement]))
+        enemySprite.run(enemyMovement)
         
         return enemySprite
     }
