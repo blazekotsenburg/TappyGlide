@@ -9,13 +9,22 @@
 import UIKit
 import SpriteKit
 import GameplayKit
+import GoogleMobileAds
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, GADRewardBasedVideoAdDelegate {
 
-    let userDefaults: UserDefaults = UserDefaults.standard
+    private var userDefaults:  UserDefaults!
+    private var rewardBasedAd: GADRewardBasedVideoAd!
+    private var viewedFullAd:  Bool!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        userDefaults = UserDefaults.standard
+        viewedFullAd = false
+        
+        rewardBasedAd          = GADRewardBasedVideoAd.sharedInstance()
+        rewardBasedAd.delegate = self
         
         if !(isKeyPresentInUserDefaults(key: "ExtraLifeCount") &&
              isKeyPresentInUserDefaults(key: "HighScore")) {
@@ -38,6 +47,7 @@ class GameViewController: UIViewController {
 //            view.showsFPS = true
 //            view.showsNodeCount = true
         }
+
     }
 
     override var shouldAutorotate: Bool {
@@ -65,4 +75,64 @@ class GameViewController: UIViewController {
         return UserDefaults.standard.object(forKey: key) != nil
     }
     
+    func loadGoogleAd() {
+        
+        rewardBasedAd.load(GADRequest(), withAdUnitID: "ca-app-pub-3940256099942544/1712485313")
+    }
+    
+    func showGoogleAd() {
+        
+        if rewardBasedAd.isReady {
+            rewardBasedAd.present(fromRootViewController: self)
+        }
+    }
+    
+    func wasFullAddViewd()->Bool{
+        
+        if viewedFullAd{
+            viewedFullAd = false
+            return true
+        }
+        else {
+         
+            return false
+        }
+    }
+    
+    /********************* GADRewardBasedVideoAdDelegat required funcs *********************/
+    
+    func rewardBasedVideoAd(_ rewardBasedVideoAd: GADRewardBasedVideoAd,
+                            didRewardUserWith reward: GADAdReward) {
+        print("Reward received with currency: \(reward.type), amount \(reward.amount).")
+        viewedFullAd = true
+    }
+    
+    func rewardBasedVideoAdDidReceive(_ rewardBasedVideoAd:GADRewardBasedVideoAd) {
+        print("Reward based video ad is received.")
+    }
+    
+    func rewardBasedVideoAdDidOpen(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        print("Opened reward based video ad.")
+    }
+    
+    func rewardBasedVideoAdDidStartPlaying(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        print("Reward based video ad started playing.")
+    }
+    
+    func rewardBasedVideoAdDidCompletePlaying(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        print("Reward based video ad has completed.")
+    }
+    
+    func rewardBasedVideoAdDidClose(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        print("Reward based video ad is closed.")
+    }
+    
+    func rewardBasedVideoAdWillLeaveApplication(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        print("Reward based video ad will leave application.")
+    }
+    
+    func rewardBasedVideoAd(_ rewardBasedVideoAd: GADRewardBasedVideoAd,
+                            didFailToLoadWithError error: Error) {
+        print("Reward based video ad failed to load.")
+    }
 }
