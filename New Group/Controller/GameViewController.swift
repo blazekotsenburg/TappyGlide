@@ -129,8 +129,11 @@ class GameViewController: UIViewController, GADRewardBasedVideoAdDelegate {
         print("Reward based video ad is closed.")
         if viewedFullAd {
             viewedFullAd = false
+            gameScene?.isPaused = false
         }
-        gameScene?.isPaused = false
+        else {
+            gameScene?.gameOver()
+        }
     }
     
     func rewardBasedVideoAdWillLeaveApplication(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {

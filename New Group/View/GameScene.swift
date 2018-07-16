@@ -241,45 +241,49 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 
                 self.removeChildren(in: removeEnemyArray)
                 self.pop.isHidden    = true
-//                self.scene?.isPaused = false
             }
                 
             else if node.name == "noThanksLabel" {
                 
-                self.scene?.isPaused = false
-                self.pop.isHidden    = true
-                self.model.playerIsDead()
-                
-                //This does not get processed until after the touches began function finishes running.
-                UserDefaults.standard.set(self.model.getLifeCount(), forKey: "ExtraLifeCount")
-                UserDefaults.standard.set(self.model.getHighScore(), forKey: "HighScore")
-                self.gameOverScene.userData?.setValue(self.model.getScore(), forKey: "Score")
-                self.gameOverScene.userData?.setValue(self.model.getHighScore(), forKey: "HighScore")
-                self.gameOverScene.userData?.setValue(model.wasHighScoreBeaten(), forKey: "WasHighScoreBeaten")
-                
-                // Let sprite animation go to right or left depending on score to make it seem random.
-                if (self.model.getScore() % 2 == 0) {
-                    let rotateGlider:SKAction = SKAction.rotate(byAngle: 10.0, duration: 1)
-                    self.gliderSprite.removeAllChildren()
-                    self.gliderSprite.physicsBody?.velocity = CGVector(dx: 200.0, dy: -200.0)
-                    
-                    self.gliderSprite.run(rotateGlider, completion: {
-                            let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
-                            self.view?.presentScene(self.gameOverScene, transition: transitionScene)
-                        })
-                    
-                }
-                else {
-                    let rotateGlider:SKAction = SKAction.rotate(byAngle: -10.0, duration: 1)
-                    self.gliderSprite.removeAllChildren()
-                    self.gliderSprite.physicsBody?.velocity = CGVector(dx: -200.0, dy: -200.0)
-                    
-                    self.gliderSprite.run(rotateGlider, completion: {
-                        let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
-                        self.view?.presentScene(self.gameOverScene, transition: transitionScene)
-                    })
-                }
+               self.gameOver()
             }
+        }
+    }
+    
+    func gameOver() {
+        
+        self.scene?.isPaused = false
+        self.pop.isHidden    = true
+        self.model.playerIsDead()
+        
+        //This does not get processed until after the touches began function finishes running.
+        UserDefaults.standard.set(self.model.getLifeCount(), forKey: "ExtraLifeCount")
+        UserDefaults.standard.set(self.model.getHighScore(), forKey: "HighScore")
+        self.gameOverScene.userData?.setValue(self.model.getScore(), forKey: "Score")
+        self.gameOverScene.userData?.setValue(self.model.getHighScore(), forKey: "HighScore")
+        self.gameOverScene.userData?.setValue(model.wasHighScoreBeaten(), forKey: "WasHighScoreBeaten")
+        
+        // Let sprite animation go to right or left depending on score to make it seem random.
+        if (self.model.getScore() % 2 == 0) {
+            let rotateGlider:SKAction = SKAction.rotate(byAngle: 10.0, duration: 1)
+            self.gliderSprite.removeAllChildren()
+            self.gliderSprite.physicsBody?.velocity = CGVector(dx: 200.0, dy: -200.0)
+            
+            self.gliderSprite.run(rotateGlider, completion: {
+                let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
+                self.view?.presentScene(self.gameOverScene, transition: transitionScene)
+            })
+            
+        }
+        else {
+            let rotateGlider:SKAction = SKAction.rotate(byAngle: -10.0, duration: 1)
+            self.gliderSprite.removeAllChildren()
+            self.gliderSprite.physicsBody?.velocity = CGVector(dx: -200.0, dy: -200.0)
+            
+            self.gliderSprite.run(rotateGlider, completion: {
+                let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
+                self.view?.presentScene(self.gameOverScene, transition: transitionScene)
+            })
         }
     }
     
