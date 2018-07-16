@@ -16,6 +16,7 @@ class GameViewController: UIViewController, GADRewardBasedVideoAdDelegate {
     private var userDefaults:  UserDefaults!
     private var rewardBasedAd: GADRewardBasedVideoAd!
     private var viewedFullAd:  Bool!
+    private var gameScene:     GameScene?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,10 +81,11 @@ class GameViewController: UIViewController, GADRewardBasedVideoAdDelegate {
         rewardBasedAd.load(GADRequest(), withAdUnitID: "ca-app-pub-3940256099942544/1712485313")
     }
     
-    func showGoogleAd() {
+    func showGoogleAd(forScene: SKScene) {
         
         if rewardBasedAd.isReady {
             rewardBasedAd.present(fromRootViewController: self)
+            gameScene = forScene as? GameScene
         }
     }
     
@@ -125,6 +127,10 @@ class GameViewController: UIViewController, GADRewardBasedVideoAdDelegate {
     
     func rewardBasedVideoAdDidClose(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
         print("Reward based video ad is closed.")
+        if viewedFullAd {
+            viewedFullAd = false
+        }
+        gameScene?.isPaused = false
     }
     
     func rewardBasedVideoAdWillLeaveApplication(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {

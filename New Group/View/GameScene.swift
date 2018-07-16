@@ -236,7 +236,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     }
                 }
             
-                self.gameViewController.showGoogleAd()
+                self.gameViewController.showGoogleAd(forScene: self)
                 
                 
                 self.removeChildren(in: removeEnemyArray)
