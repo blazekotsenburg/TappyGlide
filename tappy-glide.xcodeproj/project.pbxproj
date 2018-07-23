@@ -35,6 +35,7 @@
 		67E91B9120F2AA5F0014C523 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8F20F2AA5F0014C523 /* Assets.xcassets */; };
 		67E91B9920F2BFFE0014C523 /* PopUpNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E91B9820F2BFFE0014C523 /* PopUpNode.swift */; };
 		67E91B9C20FAC0E20014C523 /* spacerangerital.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B9B20FAC0E20014C523 /* spacerangerital.ttf */; };
+		82BEC3AD368F3EEEBE3FB08F /* libPods-tappy-glide.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67F2A746367AB60FE935563D /* libPods-tappy-glide.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,9 @@
 		67E91B8F20F2AA5F0014C523 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		67E91B9820F2BFFE0014C523 /* PopUpNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpNode.swift; sourceTree = "<group>"; };
 		67E91B9B20FAC0E20014C523 /* spacerangerital.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = spacerangerital.ttf; sourceTree = "<group>"; };
+		67F2A746367AB60FE935563D /* libPods-tappy-glide.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tappy-glide.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		75014749957BA29543509378 /* Pods-tappy-glide.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tappy-glide.release.xcconfig"; path = "Pods/Target Support Files/Pods-tappy-glide/Pods-tappy-glide.release.xcconfig"; sourceTree = "<group>"; };
+		C5797EB5BF7754ABA2541374 /* Pods-tappy-glide.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tappy-glide.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tappy-glide/Pods-tappy-glide.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82BEC3AD368F3EEEBE3FB08F /* libPods-tappy-glide.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +92,8 @@
 				67E91B9A20FAC0500014C523 /* Fonts */,
 				67A67EAB200344EC000AB589 /* tappy-glide */,
 				67A67E751FFEEECB000AB589 /* Products */,
+				AD6E8F7DA437C7A6AFED3A39 /* Pods */,
+				D58B88168650CBB1FADCA7E3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -190,6 +197,23 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		AD6E8F7DA437C7A6AFED3A39 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C5797EB5BF7754ABA2541374 /* Pods-tappy-glide.debug.xcconfig */,
+				75014749957BA29543509378 /* Pods-tappy-glide.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		D58B88168650CBB1FADCA7E3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				67F2A746367AB60FE935563D /* libPods-tappy-glide.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -197,6 +221,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 67A67E8C1FFEEECB000AB589 /* Build configuration list for PBXNativeTarget "tappy-glide" */;
 			buildPhases = (
+				282294E06DD14B4C7383C551 /* [CP] Check Pods Manifest.lock */,
 				67A67E701FFEEECB000AB589 /* Sources */,
 				67A67E711FFEEECB000AB589 /* Frameworks */,
 				67A67E721FFEEECB000AB589 /* Resources */,
@@ -269,6 +294,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		282294E06DD14B4C7383C551 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-tappy-glide-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		67A67E701FFEEECB000AB589 /* Sources */ = {
@@ -425,6 +471,7 @@
 		};
 		67A67E8D1FFEEECB000AB589 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C5797EB5BF7754ABA2541374 /* Pods-tappy-glide.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -441,6 +488,7 @@
 		};
 		67A67E8E1FFEEECB000AB589 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 75014749957BA29543509378 /* Pods-tappy-glide.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

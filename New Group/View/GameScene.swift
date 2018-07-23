@@ -23,6 +23,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     private var enemyTexture:  SKTexture!
     private var gameOverScene: SKScene!
     private var pop:           PopUpNode!
+    private var gameViewController: GameViewController!
     
     private var spriteAnimations: [String] = ["gliderSpriteJump0.png", "gliderSpriteJump1.png", "gliderSpriteJump2.png", "gliderSpriteJump3.png"]
     private var cloudImages:      [String] = ["cloud0.png", "cloud1.png"]
@@ -41,6 +42,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     private var currSpeed:             CGFloat      = 1.0
     
     override func didMove(to view: SKView) {
+        
+        gameViewController = self.view?.window?.rootViewController as! GameViewController
+        self.gameViewController.loadGoogleAd()
         
         let storedExtraLifeCount = self.userData?.value(forKey: "ExtraLifeCount") as! Int
         let storedHighScore      = self.userData?.value(forKey: "HighScore")      as! Int
@@ -231,48 +235,55 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                         removeEnemyArray.append(current)
                     }
                 }
+            
+                self.gameViewController.showGoogleAd(forScene: self)
+                
                 
                 self.removeChildren(in: removeEnemyArray)
                 self.pop.isHidden    = true
-                self.scene?.isPaused = false
             }
                 
             else if node.name == "noThanksLabel" {
                 
-                self.scene?.isPaused = false
-                self.pop.isHidden    = true
-                self.model.playerIsDead()
-                
-                //This does not get processed until after the touches began function finishes running.
-                UserDefaults.standard.set(self.model.getLifeCount(), forKey: "ExtraLifeCount")
-                UserDefaults.standard.set(self.model.getHighScore(), forKey: "HighScore")
-                self.gameOverScene.userData?.setValue(self.model.getScore(), forKey: "Score")
-                self.gameOverScene.userData?.setValue(self.model.getHighScore(), forKey: "HighScore")
-                self.gameOverScene.userData?.setValue(model.wasHighScoreBeaten(), forKey: "WasHighScoreBeaten")
-                
-                // Let sprite animation go to right or left depending on score to make it seem random.
-                if (self.model.getScore() % 2 == 0) {
-                    let rotateGlider:SKAction = SKAction.rotate(byAngle: 10.0, duration: 1)
-                    self.gliderSprite.removeAllChildren()
-                    self.gliderSprite.physicsBody?.velocity = CGVector(dx: 200.0, dy: -200.0)
-                    
-                    self.gliderSprite.run(rotateGlider, completion: {
-                            let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
-                            self.view?.presentScene(self.gameOverScene, transition: transitionScene)
-                        })
-                    
-                }
-                else {
-                    let rotateGlider:SKAction = SKAction.rotate(byAngle: -10.0, duration: 1)
-                    self.gliderSprite.removeAllChildren()
-                    self.gliderSprite.physicsBody?.velocity = CGVector(dx: -200.0, dy: -200.0)
-                    
-                    self.gliderSprite.run(rotateGlider, completion: {
-                        let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
-                        self.view?.presentScene(self.gameOverScene, transition: transitionScene)
-                    })
-                }
+               self.gameOver()
             }
+        }
+    }
+    
+    func gameOver() {
+        
+        self.scene?.isPaused = false
+        self.pop.isHidden    = true
+        self.model.playerIsDead()
+        
+        //This does not get processed until after the touches began function finishes running.
+        UserDefaults.standard.set(self.model.getLifeCount(), forKey: "ExtraLifeCount")
+        UserDefaults.standard.set(self.model.getHighScore(), forKey: "HighScore")
+        self.gameOverScene.userData?.setValue(self.model.getScore(), forKey: "Score")
+        self.gameOverScene.userData?.setValue(self.model.getHighScore(), forKey: "HighScore")
+        self.gameOverScene.userData?.setValue(model.wasHighScoreBeaten(), forKey: "WasHighScoreBeaten")
+        
+        // Let sprite animation go to right or left depending on score to make it seem random.
+        if (self.model.getScore() % 2 == 0) {
+            let rotateGlider:SKAction = SKAction.rotate(byAngle: 10.0, duration: 1)
+            self.gliderSprite.removeAllChildren()
+            self.gliderSprite.physicsBody?.velocity = CGVector(dx: 200.0, dy: -200.0)
+            
+            self.gliderSprite.run(rotateGlider, completion: {
+                let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
+                self.view?.presentScene(self.gameOverScene, transition: transitionScene)
+            })
+            
+        }
+        else {
+            let rotateGlider:SKAction = SKAction.rotate(byAngle: -10.0, duration: 1)
+            self.gliderSprite.removeAllChildren()
+            self.gliderSprite.physicsBody?.velocity = CGVector(dx: -200.0, dy: -200.0)
+            
+            self.gliderSprite.run(rotateGlider, completion: {
+                let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
+                self.view?.presentScene(self.gameOverScene, transition: transitionScene)
+            })
         }
     }
     
