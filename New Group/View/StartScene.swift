@@ -56,6 +56,7 @@ class StartScene : SKScene {
         //Finish implementing the highscore for the title screen.  Will need an image for highscore to match other titles
         
         generateGradientBackground()
+        spawnStars()
         self.addChild(glider)
         self.addChild(title)
         self.addChild(startButton)
@@ -99,5 +100,29 @@ class StartScene : SKScene {
         sprite.zPosition = -10
         
         self.addChild(sprite)
+    }
+    
+    func spawnStars() {
+        let starArr : [(CGFloat, TimeInterval, CGPoint)]
+            starArr = [(0.10, 1.5, CGPoint(x: sceneWidth * 0.15, y: sceneHeight * 0.95)),
+                       (0.15, 2.0, CGPoint(x: sceneWidth * 0.95, y: sceneHeight * 0.88)),
+                       (0.12, 1.7, CGPoint(x: sceneWidth * 0.33, y: sceneHeight * 0.75)),
+                       (0.09, 2.3, CGPoint(x: sceneWidth * 0.80, y: sceneHeight * 0.55)),
+                       (0.11, 1.3, CGPoint(x: sceneWidth * 0.56, y: sceneHeight * 0.875))]
+        
+        for i in 0 ... starArr.count - 1 {
+            
+            let star       = StarSprite(scale: starArr[i].0)
+            star.alpha     = 0
+            star.position  = starArr[i].2
+            star.zPosition = -1
+            
+            let fadeIn  = SKAction.fadeIn(withDuration: starArr[i].1)
+            let fadeOut = SKAction.fadeOut(withDuration: starArr[i].1)
+            star.run(SKAction.repeatForever(SKAction.sequence([fadeIn, fadeOut])))
+            
+            self.addChild(star)
+        }
+        
     }
 }
