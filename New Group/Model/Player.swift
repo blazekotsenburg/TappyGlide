@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class Model {
+class Player {
     private var score:          Int
     private var highScore:      Int
     private var extraLifeCount: Int
@@ -16,14 +16,24 @@ class Model {
     private var hasExtraLife:   Bool
     private var isPlayerDead:   Bool
     
+    var isNewTurn:              Bool
+    var index:                  Int
+    
+    var speedAndSpawns: [(CGFloat, UInt32)] //Speed, Interval
+    
     init() {
 
         score          = 0
         highScore      = 0
         extraLifeCount = 0
+        index          = 0
+        
         highScoreBeat  = false
         hasExtraLife   = false
         isPlayerDead   = false
+        isNewTurn      = true
+        
+        speedAndSpawns = [(1.0, 7), (1.15, 6), (1.25, 5), (1.45, 4), (1.65, 2)]
     }
     
     func getScore() -> Int {

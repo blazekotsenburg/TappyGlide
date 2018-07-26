@@ -104,11 +104,12 @@ class StartScene : SKScene {
     
     func spawnStars() {
         let starArr : [(CGFloat, TimeInterval, CGPoint)]
-            starArr = [(0.10, 1.5, CGPoint(x: sceneWidth * 0.15, y: sceneHeight * 0.95)),
-                       (0.15, 2.0, CGPoint(x: sceneWidth * 0.95, y: sceneHeight * 0.88)),
-                       (0.12, 1.7, CGPoint(x: sceneWidth * 0.33, y: sceneHeight * 0.75)),
-                       (0.09, 2.3, CGPoint(x: sceneWidth * 0.80, y: sceneHeight * 0.55)),
-                       (0.11, 1.3, CGPoint(x: sceneWidth * 0.56, y: sceneHeight * 0.875))]
+            starArr = [(0.10, 1.5, CGPoint(x: sceneWidth * 0.15, y: sceneHeight * 0.950)),
+                       (0.15, 2.0, CGPoint(x: sceneWidth * 0.95, y: sceneHeight * 0.880)),
+                       (0.12, 1.7, CGPoint(x: sceneWidth * 0.33, y: sceneHeight * 0.750)),
+                       (0.09, 2.3, CGPoint(x: sceneWidth * 0.80, y: sceneHeight * 0.550)),
+                       (0.11, 1.3, CGPoint(x: sceneWidth * 0.56, y: sceneHeight * 0.875)),
+                       (0.14, 2.2, CGPoint(x: sceneWidth * 0.20, y: sceneHeight * 0.520))]
         
         for i in 0 ... starArr.count - 1 {
             

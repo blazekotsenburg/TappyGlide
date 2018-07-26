@@ -12,17 +12,17 @@ import CoreImage
 
 class GameScene : SKScene, SKPhysicsContactDelegate {
     
-    private var gliderSprite:  SKSpriteNode!
-    private var gliderTrack:   SKSpriteNode!
-    private var sceneWidth:    CGFloat!
-    private var sceneHeight:   CGFloat!
-    private var model:         Model!
-    private var scoreLbl:      SKScoreLabel!
-    private var extraLife:     SKScoreLabel!
-    private var spawnTimer:    Timer!
-    private var enemyTexture:  SKTexture!
-    private var gameOverScene: SKScene!
-    private var pop:           PopUpNode!
+    private var gliderSprite:       SKSpriteNode!
+    private var gliderTrack:        SKSpriteNode!
+    private var sceneWidth:         CGFloat!
+    private var sceneHeight:        CGFloat!
+    private var player:             Player!
+    private var scoreLbl:           SKScoreLabel!
+    private var extraLife:          SKScoreLabel!
+    private var spawnTimer:         Timer!
+    private var enemyTexture:       SKTexture!
+    private var gameOverScene:      SKScene!
+    private var pop:                PopUpNode!
     private var gameViewController: GameViewController!
     
     private var spriteAnimations: [String] = ["gliderSpriteJump0.png", "gliderSpriteJump1.png", "gliderSpriteJump2.png", "gliderSpriteJump3.png"]
@@ -49,9 +49,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         let storedExtraLifeCount = self.userData?.value(forKey: "ExtraLifeCount") as! Int
         let storedHighScore      = self.userData?.value(forKey: "HighScore")      as! Int
         
-        model = Model()
-        model.setLifeCount(score: storedExtraLifeCount)
-        model.updateHighScore(newHighScore: storedHighScore)
+        player = Player()
+        player.setLifeCount(score: storedExtraLifeCount)
+        player.updateHighScore(newHighScore: storedHighScore)
 
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         self.physicsWorld.contactDelegate = self
@@ -77,8 +77,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         gliderTrack.position  = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
         gliderTrack.zPosition = 4.0
         
-        scoreLbl = SKScoreLabel(at: CGPoint(x: sceneWidth/4.0, y: sceneHeight/2.0) , with: "\(model.getScore())")
-        extraLife = SKScoreLabel(at: CGPoint(x: sceneWidth * 0.85, y: sceneHeight * 0.9), with:"\(model.getLifeCount())/500")
+        scoreLbl = SKScoreLabel(at: CGPoint(x: sceneWidth/4.0, y: sceneHeight/2.0) , with: "\(player.getScore())")
+        extraLife = SKScoreLabel(at: CGPoint(x: sceneWidth * 0.85, y: sceneHeight * 0.9), with:"\(player.getLifeCount())/500")
         
         scoreLbl.setSize(with: 128.0)
         extraLife.setSize(with: 48.0)
@@ -107,7 +107,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         guard spawnTimer == nil else { return }
         // After a move towards maintainting collection of settings, change something in new interval based on score so the
         // spawn rates get slightly faster but still playable.
-        var newInterval = TimeInterval(arc4random_uniform(6) + 3)/5.0
+        var newInterval = TimeInterval(arc4random_uniform(player.speedAndSpawns[player.index].1) + 3)/5.0
         if (abs(prevTime - newInterval) <= 0.6) {
             newInterval = 0.8
         }
@@ -122,14 +122,14 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     @objc func spawn () {
         spawnCloudsAndStars(speed: 1.0)
-        self.addChild(spawnEnemySprite(with: currSpeed))
+        self.addChild(spawnEnemySprite(with: player.speedAndSpawns[player.index].0))
         stopTimer()
     }
     
     override func update(_ currentTime: TimeInterval) {
         
         startTimer()
-        let score = self.model.getScore()
+        let score = self.player.getScore()
 
         switch score {
 
@@ -137,8 +137,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 
             if (!speedUpdated[0]) {
 
-                self.currSpeed = 1.15
-                updateSpriteSpeeds(with: self.currSpeed)
+//                self.currSpeed = 1.15
+                updateSpriteSpeeds(with: player.speedAndSpawns[player.index].0)
+                speedUpdated[0] = true
+                player.index += 1
             }
         break
 
@@ -146,8 +148,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 
             if (!speedUpdated[1]) {
 
-                self.currSpeed = 1.25
-                updateSpriteSpeeds(with: self.currSpeed)
+//                self.currSpeed = 1.25
+                updateSpriteSpeeds(with: player.speedAndSpawns[player.index].0)
+                speedUpdated[1] = true
+                player.index += 1
             }
         break
 
@@ -155,16 +159,19 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 
             if(!speedUpdated[2]) {
 
-                self.currSpeed = 1.45
-                updateSpriteSpeeds(with: self.currSpeed)
+//                self.currSpeed = 1.45
+                updateSpriteSpeeds(with: player.speedAndSpawns[player.index].0)
+                speedUpdated[2] = true
+                player.index += 1
             }
 
         case let x where x >= 32:
 
             if(!speedUpdated[3]) {
 
-                self.currSpeed = 1.65
-                updateSpriteSpeeds(with: self.currSpeed)
+//                self.currSpeed = 1.65
+                updateSpriteSpeeds(with: player.speedAndSpawns[player.index].0)
+                speedUpdated[3] = true
             }
         break
 
@@ -180,9 +187,13 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         let collision: UInt32 = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         
         if collision == (self.gliderSprite.physicsBody?.categoryBitMask)! | 0x1 { // 0x1 = collisionBitMask for enemy sprites
-            
-            self.scene?.isPaused = true
-            self.pop.isHidden = false
+
+            if player.isNewTurn {
+                player.isNewTurn = false
+                self.scene?.isPaused = true
+                self.pop.isHidden = false
+            }
+            else { gameOver() }
         }
     }
     
@@ -200,11 +211,27 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             self.gliderSprite.physicsBody?.collisionBitMask   = 0x0
             self.gliderSprite.physicsBody?.contactTestBitMask = 0x0
             
-            let scaleUp     = SKAction.scale(by: 4.0, duration: 0.75)
-            let scaleDown   = SKAction.scale(by: 0.25, duration: 0.75)
-            let ascend      = SKAction.animate(with: gliderTextureArray, timePerFrame: 0.2, resize: false, restore: false)
-            let wait        = SKAction.wait(forDuration: 0.2)
-            let descend     = SKAction.animate(with: gliderTextureArray.reversed(), timePerFrame: 0.2, resize: false, restore: false)
+            var scaleUp:   SKAction,
+                scaleDown: SKAction,
+                ascend:    SKAction,
+                descend:   SKAction,
+                wait:      SKAction
+            
+            if (player.getScore() > 24) {
+                scaleUp     = SKAction.scale(by: 4.0, duration: 0.65)
+                scaleDown   = SKAction.scale(by: 0.25, duration: 0.65)
+                ascend      = SKAction.animate(with: gliderTextureArray, timePerFrame: 0.18, resize: false, restore: false)
+                wait        = SKAction.wait(forDuration: 0.18)
+                descend     = SKAction.animate(with: gliderTextureArray.reversed(), timePerFrame: 0.18, resize: false, restore: false)
+            }
+            else {
+                scaleUp     = SKAction.scale(by: 4.0, duration: 0.75)
+                scaleDown   = SKAction.scale(by: 0.25, duration: 0.75)
+                ascend      = SKAction.animate(with: gliderTextureArray, timePerFrame: 0.2, resize: false, restore: false)
+                wait        = SKAction.wait(forDuration: 0.2)
+                descend     = SKAction.animate(with: gliderTextureArray.reversed(), timePerFrame: 0.2, resize: false, restore: false)
+            }
+            
             
             self.gliderSprite.run(SKAction.group([scaleUp, ascend, wait]))
             self.gliderSprite.run(SKAction.group([scaleDown, descend]), completion: {
@@ -254,17 +281,17 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         self.scene?.isPaused = false
         self.pop.isHidden    = true
-        self.model.playerIsDead()
+        self.player.playerIsDead()
         
         //This does not get processed until after the touches began function finishes running.
-        UserDefaults.standard.set(self.model.getLifeCount(), forKey: "ExtraLifeCount")
-        UserDefaults.standard.set(self.model.getHighScore(), forKey: "HighScore")
-        self.gameOverScene.userData?.setValue(self.model.getScore(), forKey: "Score")
-        self.gameOverScene.userData?.setValue(self.model.getHighScore(), forKey: "HighScore")
-        self.gameOverScene.userData?.setValue(model.wasHighScoreBeaten(), forKey: "WasHighScoreBeaten")
+        UserDefaults.standard.set(self.player.getLifeCount(), forKey: "ExtraLifeCount")
+        UserDefaults.standard.set(self.player.getHighScore(), forKey: "HighScore")
+        self.gameOverScene.userData?.setValue(self.player.getScore(), forKey: "Score")
+        self.gameOverScene.userData?.setValue(self.player.getHighScore(), forKey: "HighScore")
+        self.gameOverScene.userData?.setValue(player.wasHighScoreBeaten(), forKey: "WasHighScoreBeaten")
         
         // Let sprite animation go to right or left depending on score to make it seem random.
-        if (self.model.getScore() % 2 == 0) {
+        if (self.player.getScore() % 2 == 0) {
             let rotateGlider:SKAction = SKAction.rotate(byAngle: 10.0, duration: 1)
             self.gliderSprite.removeAllChildren()
             self.gliderSprite.physicsBody?.velocity = CGVector(dx: 200.0, dy: -200.0)
@@ -405,11 +432,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             //will need to make this a different loop so that Enemy can be used.
             if let current = node as? Enemy {
                 
-                if !self.model.hasPlayerDied() {
+                if !self.player.hasPlayerDied() {
                     
                     if (current.position.y < self.gliderSprite.position.y) && (!current.hasBeenScored()) {
-                        self.model.updateScore()
-                        self.model.updateLifeCount()
+                        self.player.updateScore()
+                        self.player.updateLifeCount()
                         self.updateScoreLabel()
                         current.setEnemyAsScored()
                     }
@@ -438,8 +465,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     func updateScoreLabel() {
         
-        self.scoreLbl.text  = "\(self.model.getScore())"
-        self.extraLife.text = "\(self.model.getLifeCount())/500" //prints parentheses
+        self.scoreLbl.text  = "\(self.player.getScore())"
+        self.extraLife.text = "\(self.player.getLifeCount())/500" //prints parentheses
         
         self.scoreLbl.animateScore()
     }
