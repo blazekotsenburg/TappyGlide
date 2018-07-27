@@ -15,11 +15,34 @@ class Player {
     private var highScoreBeat:  Bool
     private var hasExtraLife:   Bool
     private var isPlayerDead:   Bool
+    private var queue:          Queue
+    private var ssSettings:     SpeedAndSpawnSettings
     
     var isNewTurn:              Bool
     var index:                  Int
     
+    private struct Queue {
+        var list: [TimeInterval] = [TimeInterval]()
+        
+        mutating func enqueue(item: TimeInterval) {
+            list.append(item)
+        }
+        
+        mutating func dequeue()->TimeInterval {
+            if !list.isEmpty {
+                return list.removeFirst()
+            }
+            else { return 0 }
+        }
+    }
+    
     var speedAndSpawns: [(CGFloat, UInt32)] //Speed, Interval
+    
+    struct SpeedAndSpawnSettings {
+        var max:     UInt32
+        var min:     UInt32
+        var divisor: Double
+    }
     
     init() {
 
@@ -34,6 +57,9 @@ class Player {
         isNewTurn      = true
         
         speedAndSpawns = [(1.0, 7), (1.15, 6), (1.25, 5), (1.45, 4), (1.65, 2)]
+        queue          = Queue()
+        ssSettings     = SpeedAndSpawnSettings(max: 6, min: 3, divisor: 5.0)
+        self.generateSpawnIntervalsInQueue()
     }
     
     func getScore() -> Int {
@@ -49,6 +75,23 @@ class Player {
         if score > highScore {
             highScoreBeat = true
             updateHighScore(newHighScore: score)
+        }
+        
+        switch score {
+            case 8 ..< 16:
+                ssSettings.max = 5 //will set interval between 1.6 and 0.6 when used in generateSpawnIntervalsInQueue()
+            break
+            case 16 ..< 24:
+                ssSettings.max = 4 //will set interval between 1.4 and 0.6 when used in generateSpawnIntervalsInQueue()
+            break
+            case 24 ..< 32:
+                ssSettings.max = 3
+            break
+            case let x where x >= 32:
+                ssSettings.max = 2
+            break
+            default:
+            break
         }
     }
     
@@ -87,5 +130,26 @@ class Player {
     
     func playerIsDead() {
         isPlayerDead = true
+    }
+    
+    func generateSpawnIntervalsInQueue() {
+        
+        for _ in 0 ..< 50 {
+            let newInterval = TimeInterval(arc4random_uniform(ssSettings.max) + ssSettings.min) / ssSettings.divisor
+            queue.enqueue(item: newInterval)
+        }
+    }
+    
+    func getIntervalFromQueue()->TimeInterval {
+        
+        if queue.list.count < 15 {
+            self.generateSpawnIntervalsInQueue()
+        }
+        
+        return queue.dequeue()
+    }
+    
+    func peekQueue()->TimeInterval {
+        return queue.list[0]
     }
 }

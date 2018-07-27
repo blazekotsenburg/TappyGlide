@@ -101,17 +101,23 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 //        let bottomColor = CIColor(rgba: "#02080D")
         
         spawnTimer = Timer()
+        prevTime   = player.peekQueue()
     }
     
     func startTimer() {
         guard spawnTimer == nil else { return }
         // After a move towards maintainting collection of settings, change something in new interval based on score so the
         // spawn rates get slightly faster but still playable.
-        var newInterval = TimeInterval(arc4random_uniform(player.speedAndSpawns[player.index].1) + 3)/5.0
-        if (abs(prevTime - newInterval) <= 0.6) {
-            newInterval = 0.8
-        }
+        var newInterval = player.getIntervalFromQueue()
+//        if (abs(prevTime - newInterval) <= 0.6) {
+//            newInterval = 0.8
+//        }
+//        if prevTime == newInterval {
+//            newInterval += 0.1
+//            print("prevTime: \(prevTime), newInterval: \(newInterval)")
+//        }
         spawnTimer = Timer.scheduledTimer(timeInterval: newInterval, target: self, selector: #selector(GameScene.spawn), userInfo: nil, repeats: false)
+//        prevTime = newInterval
     }
     
     func stopTimer() {
@@ -122,7 +128,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     @objc func spawn () {
         spawnCloudsAndStars(speed: 1.0)
-        self.addChild(spawnEnemySprite(with: player.speedAndSpawns[player.index].0))
+        self.addChild(spawnEnemySprite(with: self.currSpeed))
         stopTimer()
     }
     
@@ -133,12 +139,12 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 
         switch score {
 
-        case 8 ..<  16:
+        case 8 ..< 16:
 
             if (!speedUpdated[0]) {
 
-//                self.currSpeed = 1.15
-                updateSpriteSpeeds(with: player.speedAndSpawns[player.index].0)
+                self.currSpeed = 1.15
+                updateSpriteSpeeds(with: self.currSpeed)
                 speedUpdated[0] = true
                 player.index += 1
             }
@@ -148,8 +154,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 
             if (!speedUpdated[1]) {
 
-//                self.currSpeed = 1.25
-                updateSpriteSpeeds(with: player.speedAndSpawns[player.index].0)
+                self.currSpeed = 1.25
+                updateSpriteSpeeds(with: self.currSpeed)
                 speedUpdated[1] = true
                 player.index += 1
             }
@@ -159,8 +165,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 
             if(!speedUpdated[2]) {
 
-//                self.currSpeed = 1.45
-                updateSpriteSpeeds(with: player.speedAndSpawns[player.index].0)
+                self.currSpeed = 1.45
+                updateSpriteSpeeds(with: self.currSpeed)
                 speedUpdated[2] = true
                 player.index += 1
             }
@@ -169,8 +175,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 
             if(!speedUpdated[3]) {
 
-//                self.currSpeed = 1.65
-                updateSpriteSpeeds(with: player.speedAndSpawns[player.index].0)
+                self.currSpeed = 1.65
+                updateSpriteSpeeds(with: self.currSpeed)
                 speedUpdated[3] = true
             }
         break
@@ -217,20 +223,20 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                 descend:   SKAction,
                 wait:      SKAction
             
-            if (player.getScore() > 24) {
+//            if (player.getScore() > 24) {
+//                scaleUp     = SKAction.scale(by: 4.0, duration: 0.65)
+//                scaleDown   = SKAction.scale(by: 0.25, duration: 0.65)
+//                ascend      = SKAction.animate(with: gliderTextureArray, timePerFrame: 0.18, resize: false, restore: false)
+//                wait        = SKAction.wait(forDuration: 0.18)
+//                descend     = SKAction.animate(with: gliderTextureArray.reversed(), timePerFrame: 0.18, resize: false, restore: false)
+//            }
+//            else {
                 scaleUp     = SKAction.scale(by: 4.0, duration: 0.65)
                 scaleDown   = SKAction.scale(by: 0.25, duration: 0.65)
-                ascend      = SKAction.animate(with: gliderTextureArray, timePerFrame: 0.18, resize: false, restore: false)
-                wait        = SKAction.wait(forDuration: 0.18)
-                descend     = SKAction.animate(with: gliderTextureArray.reversed(), timePerFrame: 0.18, resize: false, restore: false)
-            }
-            else {
-                scaleUp     = SKAction.scale(by: 4.0, duration: 0.75)
-                scaleDown   = SKAction.scale(by: 0.25, duration: 0.75)
-                ascend      = SKAction.animate(with: gliderTextureArray, timePerFrame: 0.2, resize: false, restore: false)
-                wait        = SKAction.wait(forDuration: 0.2)
-                descend     = SKAction.animate(with: gliderTextureArray.reversed(), timePerFrame: 0.2, resize: false, restore: false)
-            }
+                ascend      = SKAction.animate(with: gliderTextureArray, timePerFrame: 0.162, resize: false, restore: false)
+                wait        = SKAction.wait(forDuration: 0.0005)
+                descend     = SKAction.animate(with: gliderTextureArray.reversed(), timePerFrame: 0.162, resize: false, restore: false)
+//            }
             
             
             self.gliderSprite.run(SKAction.group([scaleUp, ascend, wait]))
