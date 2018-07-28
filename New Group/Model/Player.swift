@@ -16,8 +16,8 @@ class Player {
     private var hasExtraLife:   Bool
     private var isPlayerDead:   Bool
     private var queue:          Queue
-    private var ssSettings:     SpeedAndSpawnSettings
     
+    var playerState:            PlayerState
     var isNewTurn:              Bool
     var index:                  Int
     
@@ -34,14 +34,36 @@ class Player {
             }
             else { return 0 }
         }
+        
+        func peek()->TimeInterval{
+            return list[0]
+        }
     }
     
     var speedAndSpawns: [(CGFloat, UInt32)] //Speed, Interval
     
-    struct SpeedAndSpawnSettings {
-        var max:     UInt32
-        var min:     UInt32
-        var divisor: Double
+    struct PlayerState {
+        
+        struct EnemySpeedAndSpawnSettings {
+            var max:     UInt32
+            var min:     UInt32
+            var divisor: Double
+        }
+        
+        struct playerJumpSettings {
+            var durationUp:   TimeInterval
+            var durationDown: TimeInterval
+            var timePerFrame: TimeInterval
+            var waitDuration: TimeInterval
+        }
+        
+        var enemySpeedAndSpawnSettings: EnemySpeedAndSpawnSettings
+        var playerJumpState:            playerJumpSettings
+        
+        init() {
+            enemySpeedAndSpawnSettings = EnemySpeedAndSpawnSettings(max: 5, min: 3, divisor: 5.0)
+            playerJumpState = playerJumpSettings(durationUp: 0.65, durationDown: 0.65, timePerFrame: 0.162, waitDuration: 0.0005)
+        }
     }
     
     init() {
@@ -58,7 +80,8 @@ class Player {
         
         speedAndSpawns = [(1.0, 7), (1.15, 6), (1.25, 5), (1.45, 4), (1.65, 2)]
         queue          = Queue()
-        ssSettings     = SpeedAndSpawnSettings(max: 6, min: 3, divisor: 5.0)
+        
+        playerState    = PlayerState()
         self.generateSpawnIntervalsInQueue()
     }
     
@@ -79,16 +102,17 @@ class Player {
         
         switch score {
             case 8 ..< 16:
-                ssSettings.max = 5 //will set interval between 1.6 and 0.6 when used in generateSpawnIntervalsInQueue()
+                playerState.enemySpeedAndSpawnSettings.max = 4 //will set interval between 1.4 and 0.6 when used in generateSpawnIntervalsInQueue()
             break
             case 16 ..< 24:
-                ssSettings.max = 4 //will set interval between 1.4 and 0.6 when used in generateSpawnIntervalsInQueue()
+                playerState.enemySpeedAndSpawnSettings.max = 3 //will set interval between 1.2 and 0.6 when used in generateSpawnIntervalsInQueue()
             break
             case 24 ..< 32:
-                ssSettings.max = 3
+                playerState.enemySpeedAndSpawnSettings.max = 2
+//                playerState.enemySpeedAndSpawnSettings.min = 2
             break
             case let x where x >= 32:
-                ssSettings.max = 2
+                playerState.enemySpeedAndSpawnSettings.max = 3
             break
             default:
             break
@@ -98,7 +122,7 @@ class Player {
     func updateLifeCount() {
         extraLifeCount += 1
         
-        if (extraLifeCount >= 500) {
+        if (extraLifeCount > 499) {
             extraLifeCount = 0
             hasExtraLife   = true
         }
@@ -124,6 +148,14 @@ class Player {
         extraLifeCount = score
     }
     
+    func hasAnExtraLife()->Bool {
+        return hasExtraLife
+    }
+    
+    func resetExtraLife() {
+        hasExtraLife = false
+    }
+    
     func hasPlayerDied() -> Bool{
         return isPlayerDead
     }
@@ -134,15 +166,71 @@ class Player {
     
     func generateSpawnIntervalsInQueue() {
         
-        for _ in 0 ..< 50 {
-            let newInterval = TimeInterval(arc4random_uniform(ssSettings.max) + ssSettings.min) / ssSettings.divisor
-            queue.enqueue(item: newInterval)
+        let max     = playerState.enemySpeedAndSpawnSettings.max
+        let min     = playerState.enemySpeedAndSpawnSettings.min
+        let divisor = playerState.enemySpeedAndSpawnSettings.divisor
+        
+        switch score {
+            
+            case 0 ..< 8:
+                for _ in 0 ..< 8 {
+                    var newInterval = TimeInterval(arc4random_uniform(max) + min) / divisor
+                    if !queue.list.isEmpty {
+                        if (queue.list.last! - newInterval <= 0.2) {
+                            newInterval += 0.12
+                        }
+                    }
+                    queue.enqueue(item: newInterval)
+                }
+            break
+            
+            case 8 ..< 16:
+                for _ in 0 ..< 8 {
+                    var newInterval = TimeInterval(arc4random_uniform(max) + min) / divisor
+                    if (queue.list.last! - newInterval <= 0.2) {
+                        newInterval += 0.15
+                    }
+                    queue.enqueue(item: newInterval)
+                }
+            break
+            
+            case 16 ..< 24:
+                for _ in 0 ..< 8 {
+                    var newInterval = TimeInterval(arc4random_uniform(max) + min) / divisor
+                    if (abs(queue.list.last! - newInterval) <= 0.2) {
+                        newInterval += 0.15
+                    }
+                    queue.enqueue(item: newInterval)
+                }
+            break
+            
+            case 24 ..< 32:
+                for _ in 0 ..< 8 {
+                    var newInterval = TimeInterval(arc4random_uniform(max) + min) / divisor
+                    if (abs(queue.list.last! - newInterval) <= 0.2) {
+                        newInterval += 0.15
+                    }
+                    
+                    queue.enqueue(item: newInterval)
+                }
+            break
+            
+            default:
+                for _ in 0 ..< 50 {
+                    var newInterval = TimeInterval(arc4random_uniform(max) + min) / 6
+                    if queue.list.last! - newInterval <= 0.2 {
+                        newInterval += 0.2
+                    }
+                    queue.enqueue(item: newInterval)
+                }
+            break
         }
-    }
+        
+        }
     
     func getIntervalFromQueue()->TimeInterval {
         
-        if queue.list.count < 15 {
+        if queue.list.count <= 3 {
             self.generateSpawnIntervalsInQueue()
         }
         
@@ -150,6 +238,6 @@ class Player {
     }
     
     func peekQueue()->TimeInterval {
-        return queue.list[0]
+        return queue.peek()
     }
 }

@@ -70,7 +70,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         sceneWidth  = self.scene?.frame.width
         sceneHeight = self.scene?.frame.height
         
-        createGlider()
+        gliderSprite = createGlider()
         
         //Position the track for the glider on the screen, assign color, and set zPosition
         gliderTrack           = SKSpriteNode(color: UIColor.purple, size: CGSize(width: 20.0, height: sceneHeight))
@@ -92,6 +92,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         pop.name = "PopUpMenu"
         self.addChild(pop)
         
+        self.addChild(gliderSprite)
         self.addChild(gliderTrack)
         self.addChild(scoreLbl)
         self.addChild(extraLife)
@@ -101,14 +102,13 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 //        let bottomColor = CIColor(rgba: "#02080D")
         
         spawnTimer = Timer()
-        prevTime   = player.peekQueue()
     }
     
     func startTimer() {
         guard spawnTimer == nil else { return }
         // After a move towards maintainting collection of settings, change something in new interval based on score so the
         // spawn rates get slightly faster but still playable.
-        var newInterval = player.getIntervalFromQueue()
+        let newInterval = player.getIntervalFromQueue()
 //        if (abs(prevTime - newInterval) <= 0.6) {
 //            newInterval = 0.8
 //        }
@@ -141,7 +141,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 
         case 8 ..< 16:
 
-            if (!speedUpdated[0]) {
+            if (!speedUpdated[0] && !animationIsInProgress) {
 
                 self.currSpeed = 1.15
                 updateSpriteSpeeds(with: self.currSpeed)
@@ -152,7 +152,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 
         case 16 ..< 24:
 
-            if (!speedUpdated[1]) {
+            if (!speedUpdated[1] && !animationIsInProgress) {
 
                 self.currSpeed = 1.25
                 updateSpriteSpeeds(with: self.currSpeed)
@@ -163,7 +163,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 
         case 24 ..< 32:
 
-            if(!speedUpdated[2]) {
+            if(!speedUpdated[2] && !animationIsInProgress) {
 
                 self.currSpeed = 1.45
                 updateSpriteSpeeds(with: self.currSpeed)
@@ -173,7 +173,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 
         case let x where x >= 32:
 
-            if(!speedUpdated[3]) {
+            if(!speedUpdated[3] && !animationIsInProgress) {
 
                 self.currSpeed = 1.65
                 updateSpriteSpeeds(with: self.currSpeed)
@@ -193,13 +193,18 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         let collision: UInt32 = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         
         if collision == (self.gliderSprite.physicsBody?.categoryBitMask)! | 0x1 { // 0x1 = collisionBitMask for enemy sprites
-
-            if player.isNewTurn {
-                player.isNewTurn = false
-                self.scene?.isPaused = true
-                self.pop.isHidden = false
+            
+            if !player.hasAnExtraLife() { // not updating correctly to make it work, collision happend before update
+                if player.isNewTurn {
+                    player.isNewTurn = false
+                    self.scene?.isPaused = true
+                    self.pop.isHidden = false
+                }
+                else { gameOver() }
             }
-            else { gameOver() }
+            else {
+                player.resetExtraLife()
+            }
         }
     }
     
@@ -231,11 +236,16 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
 //                descend     = SKAction.animate(with: gliderTextureArray.reversed(), timePerFrame: 0.18, resize: false, restore: false)
 //            }
 //            else {
-                scaleUp     = SKAction.scale(by: 4.0, duration: 0.65)
-                scaleDown   = SKAction.scale(by: 0.25, duration: 0.65)
-                ascend      = SKAction.animate(with: gliderTextureArray, timePerFrame: 0.162, resize: false, restore: false)
-                wait        = SKAction.wait(forDuration: 0.0005)
-                descend     = SKAction.animate(with: gliderTextureArray.reversed(), timePerFrame: 0.162, resize: false, restore: false)
+            let durationUp   = player.playerState.playerJumpState.durationUp
+            let durationDown = player.playerState.playerJumpState.durationDown
+            let timePerFrame = player.playerState.playerJumpState.timePerFrame
+            let waitDuration = player.playerState.playerJumpState.waitDuration
+            
+                scaleUp     = SKAction.scale(by: 4.0, duration: durationUp)
+                scaleDown   = SKAction.scale(by: 0.25, duration: durationDown)
+                ascend      = SKAction.animate(with: gliderTextureArray, timePerFrame: timePerFrame, resize: false, restore: false)
+                wait        = SKAction.wait(forDuration: waitDuration)
+                descend     = SKAction.animate(with: gliderTextureArray.reversed(), timePerFrame: timePerFrame, resize: false, restore: false)
 //            }
             
             
@@ -271,8 +281,10 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             
                 self.gameViewController.showGoogleAd(forScene: self)
                 
-                
                 self.removeChildren(in: removeEnemyArray)
+                self.removeChildren(in: [gliderSprite])
+                gliderSprite = createGlider()
+                self.addChild(gliderSprite)
                 self.pop.isHidden    = true
             }
                 
@@ -336,30 +348,30 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         self.addChild(sprite)
     }
     
-    func createGlider() {
+    func createGlider()->SKSpriteNode {
         
         //Position the player's glider on the screen, assign color, and set zPosition
         let gliderTexture:SKTexture      = SKTexture(imageNamed: "gliderSprite.png")
         let gliderSpriteCategory: UInt32 = 0x1 << 1
         
-        gliderSprite             = SKSpriteNode( texture: gliderTexture)
-        gliderSprite.physicsBody = SKPhysicsBody(texture: gliderTexture, size: CGSize(width: gliderSprite.size.width/2, height: gliderSprite.size.height/2))
+        let glider = SKSpriteNode(texture: gliderTexture)
+        glider.physicsBody = SKPhysicsBody(texture: gliderTexture, size: CGSize(width: glider.size.width/2, height: glider.size.height/2))
         
-        gliderSprite.physicsBody?.categoryBitMask    = gliderSpriteCategory
-        gliderSprite.physicsBody?.collisionBitMask   = 0x1
-        gliderSprite.physicsBody?.contactTestBitMask = 0x1
+        glider.physicsBody?.categoryBitMask    = gliderSpriteCategory
+        glider.physicsBody?.collisionBitMask   = 0x1
+        glider.physicsBody?.contactTestBitMask = 0x1
         
-        gliderSprite.position  = CGPoint(x: sceneWidth/2.0, y: 200.0)
-        gliderSprite.zPosition = 6.0
+        glider.position  = CGPoint(x: sceneWidth/2.0, y: 200.0)
+        glider.zPosition = 6.0
         
         let gliderTrail       = SKEmitterNode(fileNamed: "GliderTrail")!
         gliderTrail.name      = "gliderTrail"
-        gliderTrail.position  = CGPoint(x: 0.0, y: -gliderSprite.size.height/2.0)
-        gliderTrail.zPosition = (gliderSprite.zPosition - 1)
+        gliderTrail.position  = CGPoint(x: 0.0, y: -glider.size.height/2.0)
+        gliderTrail.zPosition = (glider.zPosition - 1)
         
-        gliderSprite.addChild(gliderTrail)
+        glider.addChild(gliderTrail)
         
-        self.addChild(gliderSprite)
+        return glider
     }
     
     func spawnEnemySprite(with speed: CGFloat) -> SKSpriteNode {
