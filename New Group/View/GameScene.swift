@@ -279,13 +279,16 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     }
                 }
             
-                self.gameViewController.showGoogleAd(forScene: self)
+                if (self.gameViewController.showGoogleAd(forScene: self)) {
+                    
+                    self.removeChildren(in: removeEnemyArray)
+                    self.removeChildren(in: [gliderSprite])
+                    gliderSprite = createGlider()
+                    self.addChild(gliderSprite)
+                    self.pop.isHidden    = true
+                }
+                else { self.gameOver() }//this should later bring up another pop up saying not connected to the internet
                 
-                self.removeChildren(in: removeEnemyArray)
-                self.removeChildren(in: [gliderSprite])
-                gliderSprite = createGlider()
-                self.addChild(gliderSprite)
-                self.pop.isHidden    = true
             }
                 
             else if node.name == "noThanksLabel" {

@@ -76,7 +76,7 @@ class StartScene : SKScene {
                 
                 startButton.run(scaleUp, completion: {
                     
-                    let transition           = SKTransition.fade(withDuration: 1.5)
+                    let transition           = SKTransition.fade(withDuration: 0.5)
                     self.gameScene           = SKScene(fileNamed: "GameScene")
                     self.gameScene.scaleMode = .aspectFit
                     self.gameScene.userData  = self.userData
