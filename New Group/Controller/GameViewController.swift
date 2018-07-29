@@ -81,7 +81,7 @@ class GameViewController: UIViewController, GADRewardBasedVideoAdDelegate {
         rewardBasedAd.load(GADRequest(), withAdUnitID: "ca-app-pub-3940256099942544/1712485313")
     }
     
-    func showGoogleAd(forScene: SKScene) {
+    func showGoogleAd(forScene: SKScene) {// return bool to determine whether video was loaded or not.
         
         if rewardBasedAd.isReady {
             rewardBasedAd.present(fromRootViewController: self)

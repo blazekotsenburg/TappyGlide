@@ -11,6 +11,7 @@ import SpriteKit
 class PopUpNode : SKSpriteNode {
     
     private var continueButton: SKSpriteNode!
+    private var clipBoardImage: SKSpriteNode!
     private var promptLabel:    SKLabelNode!
     private var continueLabel:  SKLabelNode!
     private var noThanksLabel:  SKLabelNode!
@@ -32,6 +33,10 @@ class PopUpNode : SKSpriteNode {
         continueLabel.fontSize  = 55
         continueLabel.name = "continueLabel"
         self.addChild(continueLabel)
+        
+        clipBoardImage = SKSpriteNode(imageNamed: "clipBoardImage.png")
+        clipBoardImage.position = CGPoint(x: 0, y: 0)
+        self.addChild(clipBoardImage)
         
         noThanksLabel = SKLabelNode(text: "no thanks...")
         noThanksLabel.position = CGPoint(x: 0, y: continueLabel.position.y - 100)
