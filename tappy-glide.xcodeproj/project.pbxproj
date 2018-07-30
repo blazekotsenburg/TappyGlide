@@ -35,6 +35,15 @@
 		67E91B9120F2AA5F0014C523 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B8F20F2AA5F0014C523 /* Assets.xcassets */; };
 		67E91B9920F2BFFE0014C523 /* PopUpNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67E91B9820F2BFFE0014C523 /* PopUpNode.swift */; };
 		67E91B9C20FAC0E20014C523 /* spacerangerital.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B9B20FAC0E20014C523 /* spacerangerital.ttf */; };
+		67E91BA6210E9A240014C523 /* jumpSound2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B9E210E9A230014C523 /* jumpSound2.wav */; };
+		67E91BA7210E9A240014C523 /* jumpSound7.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91B9F210E9A230014C523 /* jumpSound7.wav */; };
+		67E91BA8210E9A240014C523 /* jumpSound3.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91BA0210E9A230014C523 /* jumpSound3.wav */; };
+		67E91BA9210E9A240014C523 /* jumpSound0.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91BA1210E9A240014C523 /* jumpSound0.wav */; };
+		67E91BAA210E9A240014C523 /* jumpSound5.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91BA2210E9A240014C523 /* jumpSound5.wav */; };
+		67E91BAB210E9A240014C523 /* jumpSound1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91BA3210E9A240014C523 /* jumpSound1.wav */; };
+		67E91BAC210E9A240014C523 /* jumpSound4.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91BA4210E9A240014C523 /* jumpSound4.wav */; };
+		67E91BAD210E9A240014C523 /* jumpSound6.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91BA5210E9A240014C523 /* jumpSound6.wav */; };
+		67E91BB1210EBC7D0014C523 /* startMenuMusic.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91BB0210EBC7D0014C523 /* startMenuMusic.wav */; };
 		82BEC3AD368F3EEEBE3FB08F /* libPods-tappy-glide.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67F2A746367AB60FE935563D /* libPods-tappy-glide.a */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +78,15 @@
 		67E91B8F20F2AA5F0014C523 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		67E91B9820F2BFFE0014C523 /* PopUpNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpNode.swift; sourceTree = "<group>"; };
 		67E91B9B20FAC0E20014C523 /* spacerangerital.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = spacerangerital.ttf; sourceTree = "<group>"; };
+		67E91B9E210E9A230014C523 /* jumpSound2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jumpSound2.wav; sourceTree = "<group>"; };
+		67E91B9F210E9A230014C523 /* jumpSound7.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jumpSound7.wav; sourceTree = "<group>"; };
+		67E91BA0210E9A230014C523 /* jumpSound3.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jumpSound3.wav; sourceTree = "<group>"; };
+		67E91BA1210E9A240014C523 /* jumpSound0.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jumpSound0.wav; sourceTree = "<group>"; };
+		67E91BA2210E9A240014C523 /* jumpSound5.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jumpSound5.wav; sourceTree = "<group>"; };
+		67E91BA3210E9A240014C523 /* jumpSound1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jumpSound1.wav; sourceTree = "<group>"; };
+		67E91BA4210E9A240014C523 /* jumpSound4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jumpSound4.wav; sourceTree = "<group>"; };
+		67E91BA5210E9A240014C523 /* jumpSound6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jumpSound6.wav; sourceTree = "<group>"; };
+		67E91BB0210EBC7D0014C523 /* startMenuMusic.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = startMenuMusic.wav; sourceTree = "<group>"; };
 		67F2A746367AB60FE935563D /* libPods-tappy-glide.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tappy-glide.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		75014749957BA29543509378 /* Pods-tappy-glide.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tappy-glide.release.xcconfig"; path = "Pods/Target Support Files/Pods-tappy-glide/Pods-tappy-glide.release.xcconfig"; sourceTree = "<group>"; };
 		C5797EB5BF7754ABA2541374 /* Pods-tappy-glide.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tappy-glide.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tappy-glide/Pods-tappy-glide.debug.xcconfig"; sourceTree = "<group>"; };
@@ -89,6 +107,7 @@
 		67A67E6B1FFEEECB000AB589 = {
 			isa = PBXGroup;
 			children = (
+				67E91B9D210E9A060014C523 /* Sounds */,
 				67E91B9A20FAC0500014C523 /* Fonts */,
 				67A67EAB200344EC000AB589 /* tappy-glide */,
 				67A67E751FFEEECB000AB589 /* Products */,
@@ -197,6 +216,38 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		67E91B9D210E9A060014C523 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				67E91BAF210EBC500014C523 /* StartMenu */,
+				67E91BAE210EBC400014C523 /* Jump */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
+		67E91BAE210EBC400014C523 /* Jump */ = {
+			isa = PBXGroup;
+			children = (
+				67E91BA1210E9A240014C523 /* jumpSound0.wav */,
+				67E91BA3210E9A240014C523 /* jumpSound1.wav */,
+				67E91B9E210E9A230014C523 /* jumpSound2.wav */,
+				67E91BA0210E9A230014C523 /* jumpSound3.wav */,
+				67E91BA4210E9A240014C523 /* jumpSound4.wav */,
+				67E91BA2210E9A240014C523 /* jumpSound5.wav */,
+				67E91BA5210E9A240014C523 /* jumpSound6.wav */,
+				67E91B9F210E9A230014C523 /* jumpSound7.wav */,
+			);
+			path = Jump;
+			sourceTree = "<group>";
+		};
+		67E91BAF210EBC500014C523 /* StartMenu */ = {
+			isa = PBXGroup;
+			children = (
+				67E91BB0210EBC7D0014C523 /* startMenuMusic.wav */,
+			);
+			path = StartMenu;
+			sourceTree = "<group>";
+		};
 		AD6E8F7DA437C7A6AFED3A39 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -274,20 +325,29 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67E91BA8210E9A240014C523 /* jumpSound3.wav in Resources */,
 				67A67E831FFEEECB000AB589 /* Main.storyboard in Resources */,
 				67A67E9F20033EA1000AB589 /* StarLeft.sks in Resources */,
 				671989582017A11B00265362 /* Assets.xcassets in Resources */,
 				67A67E96200324B5000AB589 /* GliderTrail.sks in Resources */,
 				67A67E7A1FFEEECB000AB589 /* GameScene.sks in Resources */,
 				67E91B9120F2AA5F0014C523 /* Assets.xcassets in Resources */,
+				67E91BAC210E9A240014C523 /* jumpSound4.wav in Resources */,
+				67E91BAA210E9A240014C523 /* jumpSound5.wav in Resources */,
+				67E91BA6210E9A240014C523 /* jumpSound2.wav in Resources */,
 				67A67E97200324B5000AB589 /* Assets.xcassets in Resources */,
 				67A67E881FFEEECB000AB589 /* LaunchScreen.storyboard in Resources */,
+				67E91BB1210EBC7D0014C523 /* startMenuMusic.wav in Resources */,
 				67A67EA5200342CA000AB589 /* StarDown.sks in Resources */,
+				67E91BA9210E9A240014C523 /* jumpSound0.wav in Resources */,
 				67E91B9C20FAC0E20014C523 /* spacerangerital.ttf in Resources */,
 				67E91B9020F2AA5F0014C523 /* GameOverSparkle.sks in Resources */,
 				67A67EA320034217000AB589 /* StarUp.sks in Resources */,
 				67E91B8520E5E6460014C523 /* StartScene.sks in Resources */,
+				67E91BA7210E9A240014C523 /* jumpSound7.wav in Resources */,
+				67E91BAB210E9A240014C523 /* jumpSound1.wav in Resources */,
 				677C5DB2208D94C800F5B8D0 /* gliderAnimations.atlas in Resources */,
+				67E91BAD210E9A240014C523 /* jumpSound6.wav in Resources */,
 				67E91B8D20F27C190014C523 /* GameOverScene.sks in Resources */,
 				67A67EA12003405D000AB589 /* StarRight.sks in Resources */,
 			);
@@ -482,7 +542,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.blazekotsenburg.tappy-glide";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -499,7 +559,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.blazekotsenburg.tappy-glide";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

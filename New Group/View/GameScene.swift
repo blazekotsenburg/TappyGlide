@@ -27,6 +27,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     
     private var spriteAnimations: [String] = ["gliderSpriteJump0.png", "gliderSpriteJump1.png", "gliderSpriteJump2.png", "gliderSpriteJump3.png"]
     private var cloudImages:      [String] = ["cloud0.png", "cloud1.png"]
+    private var jumpSounds:       [Int]!
     
     private var gliderTextureAtlas = SKTextureAtlas()
     private var gliderTextureArray = [SKTexture]()
@@ -66,6 +67,9 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             let name = "gliderSpriteJump\(i)"
             gliderTextureArray.append(SKTexture(imageNamed: name))
         }
+        
+        jumpSounds = [Int]()
+        populateJumpSounds()
         
         sceneWidth  = self.scene?.frame.width
         sceneHeight = self.scene?.frame.height
@@ -213,6 +217,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         // If a glider animation is already in progress, prevent the player from triggering the animation on
         // multiple touchesEnded events.
         if (!animationIsInProgress) {
+            
+            if jumpSounds.count <= 10 {
+                populateJumpSounds()
+            }
+            self.run(SKAction.playSoundFileNamed("jumpSound\(jumpSounds.removeLast())", waitForCompletion: false))
             
             animationIsInProgress = true
             
@@ -490,5 +499,13 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         self.extraLife.text = "\(self.player.getLifeCount())/500" //prints parentheses
         
         self.scoreLbl.animateScore()
+    }
+    
+    func populateJumpSounds() {
+        
+        for _ in 0 ..< 50 {
+            let index = Int(arc4random_uniform(8))
+            jumpSounds.append(index)
+        }
     }
 }
