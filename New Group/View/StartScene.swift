@@ -23,6 +23,12 @@ class StartScene : SKScene {
     
     override func didMove(to view: SKView) {
         
+        if let bckgndUrl = Bundle.main.url(forResource: "TappyGlideStartMusic", withExtension: "wav") {
+            backgroundMusic = SKAudioNode(url: bckgndUrl)
+            backgroundMusic.autoplayLooped = true
+            print("in")
+        }
+        
         //should read from the userDefaults here to set userData for scene ie self.userData = userdefaults...
         let userDefaults = UserDefaults.standard
         self.userData = self.userData ?? NSMutableDictionary()
@@ -56,18 +62,16 @@ class StartScene : SKScene {
         highScore = SKLabelNode(text: "High Score: \(userDefaults.integer(forKey: "HighScore"), forKey: "HighScore")")
         //Finish implementing the highscore for the title screen.  Will need an image for highscore to match other titles
         
-        if let bckgndUrl = Bundle.main.url(forResource: "startMenuMusic", withExtension: "wav") {
-            backgroundMusic = SKAudioNode(url: bckgndUrl)
-            addChild(backgroundMusic)
-        }
+        
 //        self.run(SKAction.repeatForever(SKAction.playSoundFileNamed("startMenuMusic", waitForCompletion: false)))
         
         generateGradientBackground()
         spawnStars()
-        self.addChild(glider)
-        self.addChild(title)
-        self.addChild(startButton)
-        self.addChild(gliderTrack)
+        addChild(glider)
+        addChild(title)
+        addChild(startButton)
+        addChild(gliderTrack)
+        addChild(backgroundMusic)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

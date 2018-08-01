@@ -43,7 +43,7 @@
 		67E91BAB210E9A240014C523 /* jumpSound1.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91BA3210E9A240014C523 /* jumpSound1.wav */; };
 		67E91BAC210E9A240014C523 /* jumpSound4.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91BA4210E9A240014C523 /* jumpSound4.wav */; };
 		67E91BAD210E9A240014C523 /* jumpSound6.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91BA5210E9A240014C523 /* jumpSound6.wav */; };
-		67E91BB1210EBC7D0014C523 /* startMenuMusic.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91BB0210EBC7D0014C523 /* startMenuMusic.wav */; };
+		67E91BBD21115BF10014C523 /* TappyGlideStartMusic.wav in Resources */ = {isa = PBXBuildFile; fileRef = 67E91BBC21115BF10014C523 /* TappyGlideStartMusic.wav */; };
 		82BEC3AD368F3EEEBE3FB08F /* libPods-tappy-glide.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 67F2A746367AB60FE935563D /* libPods-tappy-glide.a */; };
 /* End PBXBuildFile section */
 
@@ -86,7 +86,7 @@
 		67E91BA3210E9A240014C523 /* jumpSound1.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jumpSound1.wav; sourceTree = "<group>"; };
 		67E91BA4210E9A240014C523 /* jumpSound4.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jumpSound4.wav; sourceTree = "<group>"; };
 		67E91BA5210E9A240014C523 /* jumpSound6.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = jumpSound6.wav; sourceTree = "<group>"; };
-		67E91BB0210EBC7D0014C523 /* startMenuMusic.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = startMenuMusic.wav; sourceTree = "<group>"; };
+		67E91BBC21115BF10014C523 /* TappyGlideStartMusic.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = TappyGlideStartMusic.wav; sourceTree = "<group>"; };
 		67F2A746367AB60FE935563D /* libPods-tappy-glide.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tappy-glide.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		75014749957BA29543509378 /* Pods-tappy-glide.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tappy-glide.release.xcconfig"; path = "Pods/Target Support Files/Pods-tappy-glide/Pods-tappy-glide.release.xcconfig"; sourceTree = "<group>"; };
 		C5797EB5BF7754ABA2541374 /* Pods-tappy-glide.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tappy-glide.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tappy-glide/Pods-tappy-glide.debug.xcconfig"; sourceTree = "<group>"; };
@@ -243,7 +243,7 @@
 		67E91BAF210EBC500014C523 /* StartMenu */ = {
 			isa = PBXGroup;
 			children = (
-				67E91BB0210EBC7D0014C523 /* startMenuMusic.wav */,
+				67E91BBC21115BF10014C523 /* TappyGlideStartMusic.wav */,
 			);
 			path = StartMenu;
 			sourceTree = "<group>";
@@ -337,7 +337,6 @@
 				67E91BA6210E9A240014C523 /* jumpSound2.wav in Resources */,
 				67A67E97200324B5000AB589 /* Assets.xcassets in Resources */,
 				67A67E881FFEEECB000AB589 /* LaunchScreen.storyboard in Resources */,
-				67E91BB1210EBC7D0014C523 /* startMenuMusic.wav in Resources */,
 				67A67EA5200342CA000AB589 /* StarDown.sks in Resources */,
 				67E91BA9210E9A240014C523 /* jumpSound0.wav in Resources */,
 				67E91B9C20FAC0E20014C523 /* spacerangerital.ttf in Resources */,
@@ -347,6 +346,7 @@
 				67E91BA7210E9A240014C523 /* jumpSound7.wav in Resources */,
 				67E91BAB210E9A240014C523 /* jumpSound1.wav in Resources */,
 				677C5DB2208D94C800F5B8D0 /* gliderAnimations.atlas in Resources */,
+				67E91BBD21115BF10014C523 /* TappyGlideStartMusic.wav in Resources */,
 				67E91BAD210E9A240014C523 /* jumpSound6.wav in Resources */,
 				67E91B8D20F27C190014C523 /* GameOverScene.sks in Resources */,
 				67A67EA12003405D000AB589 /* StarRight.sks in Resources */,
