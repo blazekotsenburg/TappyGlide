@@ -38,7 +38,7 @@ class GameViewController: UIViewController, GADRewardBasedVideoAdDelegate {
             // Load the SKScene from 'GameScene.sks'
             if let startScene = SKScene(fileNamed: "StartScene") {
                 // Set the scale mode to scale to fit the window
-                startScene.scaleMode = .aspectFill
+                startScene.scaleMode = .aspectFit
                 // Present the startScene
                 view.presentScene(startScene)
             }

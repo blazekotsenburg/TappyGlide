@@ -26,7 +26,6 @@ class StartScene : SKScene {
         if let bckgndUrl = Bundle.main.url(forResource: "TappyGlideStartMusic", withExtension: "wav") {
             backgroundMusic = SKAudioNode(url: bckgndUrl)
             backgroundMusic.autoplayLooped = true
-            print("in")
         }
         
         //should read from the userDefaults here to set userData for scene ie self.userData = userdefaults...
@@ -107,7 +106,7 @@ class StartScene : SKScene {
         
         let sprite       = SKSpriteNode(texture: texture)
         sprite.position  = CGPoint(x: sceneWidth/2.0, y: sceneHeight/2.0)
-        sprite.size      = self.frame.size
+        sprite.size      = (self.scene?.size)!
         sprite.zPosition = -10
         
         self.addChild(sprite)

@@ -11,14 +11,20 @@ import GameplayKit
 
 class GameOverScene : SKScene {
     
-    private var sceneWidth:    CGFloat!
-    private var sceneHeight:   CGFloat!
-    private var gameOverLabel: SKLabelNode!
-    private var startScene:    SKScene!
-    private var sparkles:      SKEmitterNode!
-    private var scoreLabel:    SKLabelNode!
+    private var sceneWidth:      CGFloat!
+    private var sceneHeight:     CGFloat!
+    private var gameOverLabel:   SKLabelNode!
+    private var startScene:      SKScene!
+    private var sparkles:        SKEmitterNode!
+    private var scoreLabel:      SKLabelNode!
+    private var backgroundMusic: SKAudioNode!
     
     override func didMove(to view: SKView) {
+        
+        if let bckgndUrl = Bundle.main.url(forResource: "GameOver", withExtension: "wav") {
+            backgroundMusic = SKAudioNode(url: bckgndUrl)
+        }
+        self.addChild(backgroundMusic)
         
         sceneWidth  = self.scene?.frame.width
         sceneHeight = self.scene?.frame.height

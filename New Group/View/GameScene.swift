@@ -9,6 +9,7 @@
 import SpriteKit
 import GameplayKit
 import CoreImage
+import AVFoundation
 
 class GameScene : SKScene, SKPhysicsContactDelegate {
     
@@ -24,10 +25,12 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
     private var gameOverScene:      SKScene!
     private var pop:                PopUpNode!
     private var gameViewController: GameViewController!
+    private var backgroundMusic:    SKAudioNode!
+    private var avqPlayer:          AVQueuePlayer!
+    private var avqPlayerLooper:    AVPlayerLooper!
     
     private var spriteAnimations: [String] = ["gliderSpriteJump0.png", "gliderSpriteJump1.png", "gliderSpriteJump2.png", "gliderSpriteJump3.png"]
     private var cloudImages:      [String] = ["cloud0.png", "cloud1.png"]
-    private var jumpSounds:       [Int]!
     
     private var gliderTextureAtlas = SKTextureAtlas()
     private var gliderTextureArray = [SKTexture]()
@@ -46,6 +49,18 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         
         gameViewController = self.view?.window?.rootViewController as! GameViewController
         self.gameViewController.loadGoogleAd()
+        
+//        avqPlayer = AVQueuePlayer()
+//
+//        guard let url = Bundle.main.url(forResource: "TGThemeSong", withExtension: "wav") else { return }
+//        let playerItem = AVPlayerItem(asset: AVAsset(url: url))
+//        avqPlayerLooper = AVPlayerLooper(player: avqPlayer, templateItem: playerItem)
+//        avqPlayer.play()
+        
+        if let bckgndUrl = Bundle.main.url(forResource: "TGThemeSong", withExtension: "wav") {
+            backgroundMusic = SKAudioNode(url: bckgndUrl)
+            backgroundMusic.autoplayLooped = true
+        }
         
         let storedExtraLifeCount = self.userData?.value(forKey: "ExtraLifeCount") as! Int
         let storedHighScore      = self.userData?.value(forKey: "HighScore")      as! Int
@@ -67,9 +82,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             let name = "gliderSpriteJump\(i)"
             gliderTextureArray.append(SKTexture(imageNamed: name))
         }
-        
-        jumpSounds = [Int]()
-        populateJumpSounds()
         
         sceneWidth  = self.scene?.frame.width
         sceneHeight = self.scene?.frame.height
@@ -100,6 +112,7 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         self.addChild(gliderTrack)
         self.addChild(scoreLbl)
         self.addChild(extraLife)
+        self.addChild(backgroundMusic)
         generateGradientBackground()
         
 //        let topColor    = CIColor(rgba: "#134E5E")
@@ -218,11 +231,6 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         // multiple touchesEnded events.
         if (!animationIsInProgress) {
             
-            if jumpSounds.count <= 10 {
-                populateJumpSounds()
-            }
-            self.run(SKAction.playSoundFileNamed("jumpSound\(jumpSounds.removeLast())", waitForCompletion: false))
-            
             animationIsInProgress = true
             
             self.gliderSprite.childNode(withName: "gliderTrail")?.run(SKAction.fadeOut(withDuration: 0.15))
@@ -280,6 +288,8 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
             
             if node.name == "continueLabel" {
                 
+//                avqPlayer.pause()
+
                 var removeEnemyArray = [SKNode]()
                 self.enumerateChildNodes(withName: "enemy") { (node:SKNode, nil) in
 
@@ -296,13 +306,13 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
                     self.addChild(gliderSprite)
                     self.pop.isHidden    = true
                 }
-                else { self.gameOver() }//this should later bring up another pop up saying not connected to the internet
+                else { gameOver() }//this should later bring up another pop up saying not connected to the internet
                 
             }
                 
             else if node.name == "noThanksLabel" {
                 
-               self.gameOver()
+               gameOver()
             }
         }
     }
@@ -312,19 +322,20 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         self.scene?.isPaused = false
         self.pop.isHidden    = true
         self.player.playerIsDead()
+        avqPlayer = nil
         
         //This does not get processed until after the touches began function finishes running.
         UserDefaults.standard.set(self.player.getLifeCount(), forKey: "ExtraLifeCount")
         UserDefaults.standard.set(self.player.getHighScore(), forKey: "HighScore")
-        self.gameOverScene.userData?.setValue(self.player.getScore(), forKey: "Score")
-        self.gameOverScene.userData?.setValue(self.player.getHighScore(), forKey: "HighScore")
-        self.gameOverScene.userData?.setValue(player.wasHighScoreBeaten(), forKey: "WasHighScoreBeaten")
+        gameOverScene.userData?.setValue(self.player.getScore(), forKey: "Score")
+        gameOverScene.userData?.setValue(self.player.getHighScore(), forKey: "HighScore")
+        gameOverScene.userData?.setValue(player.wasHighScoreBeaten(), forKey: "WasHighScoreBeaten")
         
         // Let sprite animation go to right or left depending on score to make it seem random.
         if (self.player.getScore() % 2 == 0) {
             let rotateGlider:SKAction = SKAction.rotate(byAngle: 10.0, duration: 1)
-            self.gliderSprite.removeAllChildren()
-            self.gliderSprite.physicsBody?.velocity = CGVector(dx: 200.0, dy: -200.0)
+            gliderSprite.removeAllChildren()
+            gliderSprite.physicsBody?.velocity = CGVector(dx: 200.0, dy: -200.0)
             
             self.gliderSprite.run(rotateGlider, completion: {
                 let transitionScene: SKTransition = SKTransition.fade(withDuration: 1.0)
@@ -501,11 +512,11 @@ class GameScene : SKScene, SKPhysicsContactDelegate {
         self.scoreLbl.animateScore()
     }
     
-    func populateJumpSounds() {
-        
-        for _ in 0 ..< 50 {
-            let index = Int(arc4random_uniform(8))
-            jumpSounds.append(index)
+    func toggleAVPlayerState() {
+        if avqPlayer.isMuted {
+            avqPlayer.isMuted = false
         }
+        else{ avqPlayer.isMuted = true }
     }
+        
 }
